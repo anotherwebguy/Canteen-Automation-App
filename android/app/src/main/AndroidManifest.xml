@@ -11,8 +11,8 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="canteen_app"
-        android:icon="@mipmap/ic_launcher">
+        android:label="InstaFood"
+        android:icon="@mipmap/app_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
