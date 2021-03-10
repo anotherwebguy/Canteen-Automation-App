@@ -1,4 +1,5 @@
 import 'package:canteen_app/homeView.dart';
+import 'package:canteen_app/screens/loginpage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       // home: FirebaseAuth.instance.currentUser != null
       //     ? ProfileScreen()
       //     : WalkThrough(),
-      home: HomeView(),
+      home: LoginPage(),
 
       debugShowCheckedModeBanner: false,
     );
