@@ -1,7 +1,9 @@
+import 'package:canteen_app/Authentications/loginPage.dart';
 import 'package:canteen_app/homeView.dart';
-import 'package:canteen_app/screens/loginpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   try {
@@ -15,7 +17,10 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
 
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+      .then((_) {
+    runApp(new MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -39,8 +44,10 @@ class MyApp extends StatelessWidget {
       // home: FirebaseAuth.instance.currentUser != null
       //     ? ProfileScreen()
       //     : WalkThrough(),
-      home: LoginPage(),
-
+     // home: LoginPage(),
+      home: FirebaseAuth.instance.currentUser != null
+          ? HomeView()
+          : LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }

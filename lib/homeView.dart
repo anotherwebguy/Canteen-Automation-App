@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:canteen_app/Admin/addproduct.dart';
 import 'package:canteen_app/Helpers/dataGenerator.dart';
 import 'package:canteen_app/Helpers/extensions.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
@@ -21,6 +22,7 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     Listings1 = getFilterFavourites();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +69,8 @@ class _HomeViewState extends State<HomeView> {
                               color: Colors.black,size: 25,
                             ),
                             onPressed: () {
-
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => AddProduct()));
                             },
                           ),
                           IconButton(
@@ -171,7 +174,7 @@ class _HomeViewState extends State<HomeView> {
                     ],
                   ),
                 ),
-                Text("")
+                SizedBox(height: 10,)
               ],
             ),
           ),
