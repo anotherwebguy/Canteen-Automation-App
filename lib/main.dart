@@ -45,6 +45,8 @@ class MyApp extends StatelessWidget {
       //     ? ProfileScreen()
       //     : WalkThrough(),
      // home: LoginPage(),
+
+     //Real Login
       home: FirebaseAuth.instance.currentUser != null
           ? HomeView()
           : LoginPage(),

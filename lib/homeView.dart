@@ -174,7 +174,8 @@ class _HomeViewState extends State<HomeView> {
                     ],
                   ),
                 ),
-                SizedBox(height: 10,)
+                SizedBox(height: 10,),
+                //Image.network("https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1083803145453170&height=200&width=200&ext=1618153893&hash=AeSonAU8Oo3ZaDY-f6I"),
               ],
             ),
           ),
