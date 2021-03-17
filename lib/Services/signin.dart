@@ -1,5 +1,6 @@
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:http/http.dart' as http;
@@ -85,4 +86,64 @@ class AuthService{
   Future<void> signOutGoogle() async {
     await googleSignIn.signOut();
   }
+
+  Future<void> signOut() async {
+    return _auth.signOut();
+  }
+
+  Future<String> login(email, pw, BuildContext context) async {
+    try {
+      UserCredential authResult =
+      await _auth.signInWithEmailAndPassword(email: email, password: pw);
+      final User user = authResult.user;
+      if (user != null) {
+        return '$user';
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Login Failed'),
+            content: Text('Please check the entered details again'),
+            actions: [
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ));
+    }
+    return null;
+  }
+
+  Future<String> register(String name, String email, String pw, BuildContext context) async {
+    try {
+      UserCredential authResult =
+      await _auth.createUserWithEmailAndPassword(email: email, password: pw);
+      final User user = authResult.user;
+      if (user != null) {
+        await addemailuser(user.uid, name, email);
+        return '$user';
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Registration Failed'),
+            content: Text('User already exists'),
+            actions: [
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ));
+    }
+    return null;
+  }
+
 }

@@ -1,4 +1,7 @@
-import 'package:canteen_app/Authentications/loginPage.dart';
+
+import 'package:canteen_app/Authentications/dashboard.dart';
+import 'package:canteen_app/Services/dbdata.dart';
+
 import 'package:canteen_app/homeView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,6 +18,7 @@ Future<void> main() async {
   }
 
   await Firebase.initializeApp();
+  await fetchData();
 
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
@@ -49,7 +53,7 @@ class MyApp extends StatelessWidget {
      //Real Login
       home: FirebaseAuth.instance.currentUser != null
           ? HomeView()
-          : LoginPage(),
+          : Dashboard(),
       debugShowCheckedModeBanner: false,
     );
   }
