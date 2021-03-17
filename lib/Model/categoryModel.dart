@@ -5,3 +5,12 @@ class CategoryModel {
   var img = "";
   Color color;
 }
+
+
+class DashboardCollections {
+  var name;
+  var image;
+  var info;
+
+  DashboardCollections(this.name, this.image, this.info);
+}

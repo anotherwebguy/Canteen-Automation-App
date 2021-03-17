@@ -38,3 +38,12 @@ List<CategoryModel> getFilterFavourites() {
   categoryModelArrayList.add(item5);
   return categoryModelArrayList;
 }
+
+List<DashboardCollections> addCollectionData() {
+  List<DashboardCollections> collectionData = List<DashboardCollections>();
+  collectionData.add(DashboardCollections("Fast Food", "assets/home1.jpg", "Starts from @15"));
+  collectionData.add(DashboardCollections("Drinks", "assets/dash3.jpg", "Starts from @15"));
+  collectionData.add(DashboardCollections("Dinner", "assets/dash5.jpg", "Starts from @35"));
+  collectionData.add(DashboardCollections("Desserts", "assets/dash2.jpg", "Starts from @15"));
+  return collectionData;
+}
