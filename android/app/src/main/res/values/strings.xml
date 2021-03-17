@@ -1,0 +1,5 @@
+<resources>
+<string name="app_name">InstaFood</string>
+<string name="facebook_app_id">147127887282118</string>
+<string name="fb_login_protocol_scheme">fb147127887282118</string>
+</resources>

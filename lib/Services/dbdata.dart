@@ -15,6 +15,15 @@ Future<void> addGoogleUser(String uid, String name, String email, String profile
   });
 }
 
+Future<void> addFacebookUser(String uid, String name, String email, String profileimg) async {
+  return await FirebaseFirestore.instance.collection("admins").doc(uid).set({
+    'username': name,
+    'email': email,
+    'profileimg': profileimg,
+    'role': "user",
+  });
+}
+
 Future<void> addemailuser(String uid, String name, String email) async {
   return await FirebaseFirestore.instance.collection("admins").doc(uid).set({
     'username': name,

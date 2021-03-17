@@ -384,7 +384,22 @@ class _DashboardState extends State<Dashboard> {
                           borderRadius: 50,
                           iconSize: 30,
                           style: AuthButtonStyle.icon,
-                          onPressed: (){}),
+                          onPressed: ()async{
+                            await _auth.signInWithFacebook().then(
+                                  (result) async {
+                                if (result != null) {
+                                  await fetchData();
+                                  Navigator.pushAndRemoveUntil(context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return HomeView();
+                                        },
+                                      ), (route) => false);
+
+                                }
+                              },
+                            );
+                          }),
                     ],
                   ),
                   SizedBox(height:20),

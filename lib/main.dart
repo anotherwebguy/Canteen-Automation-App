@@ -1,6 +1,7 @@
 
+import 'package:canteen_app/Authentications/dashboard.dart';
 import 'package:canteen_app/Services/dbdata.dart';
-import 'file:///C:/Users/mohit/AndroidStudioProjects/canteen_app/lib/Authentications/dashboard.dart';
+
 import 'package:canteen_app/homeView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -48,6 +49,8 @@ class MyApp extends StatelessWidget {
       //     ? ProfileScreen()
       //     : WalkThrough(),
      // home: LoginPage(),
+
+     //Real Login
       home: FirebaseAuth.instance.currentUser != null
           ? HomeView()
           : Dashboard(),

@@ -56,6 +56,7 @@ dependencies:
   flutter_signin_button: ^1.1.0
   nb_utils: 3.1.6+7
   auth_buttons: ^0.0.6
+  flutter_facebook_auth: ^1.0.0
 
 dev_dependencies:
   flutter_test:
