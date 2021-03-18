@@ -46,6 +46,10 @@ class AuthService{
      return null;
 }
 
+  Future<void> signOutFB() async {
+    await FacebookAuth.instance.logOut();
+  }
+
   Future<String> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
