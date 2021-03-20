@@ -2,10 +2,10 @@ import 'package:auth_buttons/res/buttons/facebook_auth_button.dart';
 import 'package:auth_buttons/res/buttons/google_auth_button.dart';
 import 'package:auth_buttons/res/shared/auth_style.dart';
 import 'package:canteen_app/Authentications/mobile.dart';
+import 'package:canteen_app/CommonScreens/homeView.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Services/signin.dart';
-import 'file:///C:/Users/mohit/AndroidStudioProjects/canteen_app/lib/CommonScreens/homeView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
