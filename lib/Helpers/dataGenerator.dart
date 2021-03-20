@@ -16,26 +16,20 @@ List<CategoryModel> getFilterFavourites() {
   item2.color = Color(0xFFB88DDD);
 
   CategoryModel item3 = CategoryModel();
-  item3.img = "assets/db1_ic_chicken.svg";
-  item3.name = "Dinner";
-  item3.color = Color(0xFFC2DB77);
+  item3.img = "assets/db1_ic_cake.svg";
+  item3.name = "Deserts";
+  item3.color = Color(0xFFF5D270);
 
   CategoryModel item4 = CategoryModel();
-  item4.img = "assets/db1_ic_cake.svg";
-  item4.name = "Deserts";
-  item4.color = Color(0xFFF5D270);
-
-  CategoryModel item5 = CategoryModel();
-  item5.img = "assets/d5_ic_food.svg";
-  item5.name = "All";
-  item5.color = Color(0xFFFBC02D);
+  item4.img = "assets/d5_ic_food.svg";
+  item4.name = "All";
+  item4.color = Color(0xFFFBC02D);
 
 
   categoryModelArrayList.add(item1);
   categoryModelArrayList.add(item2);
   categoryModelArrayList.add(item3);
   categoryModelArrayList.add(item4);
-  categoryModelArrayList.add(item5);
   return categoryModelArrayList;
 }
 
@@ -43,7 +37,6 @@ List<DashboardCollections> addCollectionData() {
   List<DashboardCollections> collectionData = List<DashboardCollections>();
   collectionData.add(DashboardCollections("Fast Food", "assets/home1.jpg", "Starts from @15"));
   collectionData.add(DashboardCollections("Drinks", "assets/dash3.jpg", "Starts from @15"));
-  collectionData.add(DashboardCollections("Dinner", "assets/dash5.jpg", "Starts from @35"));
   collectionData.add(DashboardCollections("Desserts", "assets/dash2.jpg", "Starts from @15"));
   return collectionData;
 }

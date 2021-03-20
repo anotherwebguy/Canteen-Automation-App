@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-String name, email, profileimg,role;
+String name, email, profileimg,role,phn;
 bool existence;
 
 
@@ -21,6 +21,13 @@ Future<void> addFacebookUser(String uid, String name, String email, String profi
     'email': email,
     'profileimg': profileimg,
     'role': "admin",
+  });
+}
+
+Future<void> addphnandphoto(String uid, String image, String phn) async {
+  return await FirebaseFirestore.instance.collection("admins").doc(uid).update({
+    'profileimg': image,
+    'phone': phn,
   });
 }
 
@@ -44,6 +51,7 @@ Future<void> fetchData() async {
       email = value.get('email');
       profileimg = value.get('profileimg');
       role=value.get('role');
+      phn=value.get('phone');
       existence=value.exists;
     });
   } catch (e) {}

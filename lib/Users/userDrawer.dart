@@ -2,7 +2,7 @@ import 'package:canteen_app/Authentications/dashboard.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Services/signin.dart';
-import 'package:canteen_app/homeView.dart';
+import 'file:///C:/Users/mohit/AndroidStudioProjects/canteen_app/lib/CommonScreens/homeView.dart';
 import 'package:flutter/material.dart';
 
 class UserDrawer extends StatefulWidget {
@@ -47,6 +47,7 @@ class _UserDrawerState extends State<UserDrawer> {
                     style: TextStyle(color:Colors.blue,),
                   ),
                   onPressed: () async{
+                    phn=null;
                     await _auth.signOutGoogle();
                     await _auth.signOut();
                     await _auth.signOutFB();
@@ -151,16 +152,31 @@ class _UserDrawerState extends State<UserDrawer> {
                     )),
                 SizedBox(height: 30),
                 getDrawerItem( Icons.dashboard,"Home", 1,ind: "home"),
-                Divider(color: Color(0XFFDADADA), height: 1),
+                Padding(
+                  padding: const EdgeInsets.only(left:15.0,right: 15.0),
+                  child: Divider(color: Color(0XFFDADADA), height: 1),
+                ),
                 getDrawerItem( Icons.shopping_cart,"Your Cart", 2),
-                Divider(color: Color(0XFFDADADA), height: 1),
+                Padding(
+                  padding: const EdgeInsets.only(left:15.0,right: 15.0),
+                  child: Divider(color: Color(0XFFDADADA), height: 1),
+                ),
                 getDrawerItem(Icons.favorite_border, "Favorites", 3),
-                Divider(color: Color(0XFFDADADA), height: 1),
+                Padding(
+                  padding: const EdgeInsets.only(left:15.0,right: 15.0),
+                  child: Divider(color: Color(0XFFDADADA), height: 1),
+                ),
                 //getDrawerItem(Icons.history, "History", 4),
                 getDrawerItem(Icons.notifications_active, "Notifications", 4),
-                Divider(color: Color(0XFFDADADA), height: 1),
+                Padding(
+                  padding: const EdgeInsets.only(left:15.0,right: 15.0),
+                  child: Divider(color: Color(0XFFDADADA), height: 1),
+                ),
                 getDrawerItem(Icons.logout, "Logout", 5,ind: "log"),
-                Divider(color: Color(0XFFDADADA), height: 1),
+                Padding(
+                  padding: const EdgeInsets.only(left:15.0,right: 15.0),
+                  child: Divider(color: Color(0XFFDADADA), height: 1),
+                ),
                 SizedBox(height: 30),
                 //Divider(color: Color(0XFFDADADA), height: 1),
                 SizedBox(height: 30),

@@ -1,8 +1,9 @@
 
 import 'package:canteen_app/Authentications/dashboard.dart';
+import 'package:canteen_app/Authentications/mobile.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 
-import 'package:canteen_app/homeView.dart';
+import 'file:///C:/Users/mohit/AndroidStudioProjects/canteen_app/lib/CommonScreens/homeView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -39,21 +40,11 @@ class MyApp extends StatelessWidget {
 
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // home: FirebaseAuth.instance.currentUser != null
-      //     ? Database().existence == true
-      //     ? ProfileScreen()
-      //     : WelcomePage()
-      //     : WalkThrough(),
-
-      // home: FirebaseAuth.instance.currentUser != null
-      //     ? ProfileScreen()
-      //     : WalkThrough(),
-     // home: LoginPage(),
-
+    
      //Real Login
-      home: FirebaseAuth.instance.currentUser != null
+      home: FirebaseAuth.instance.currentUser != null && phn!=null
           ? HomeView()
-          : Dashboard(),
+          :FirebaseAuth.instance.currentUser != null && phn==null ? Mobile() : Dashboard(),
       debugShowCheckedModeBanner: false,
     );
   }

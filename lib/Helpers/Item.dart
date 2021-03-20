@@ -1,18 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:canteen_app/CommonScreens/description.dart';
 import 'package:canteen_app/Helpers/flutter_rating_bar.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:flutter/material.dart';
 
 class Item extends StatelessWidget {
-  String name,image,price;
+  String name,image,price,description,category;
   int rating;
-  Item({this.name,this.image,this.price,this.rating});
+  Item({this.name,this.image,this.price,this.rating,this.description,this.category});
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => Description(image: image,name: name,description: description,amount: price, category: category,review: rating,)));
 
       },
       child: Container(
@@ -28,16 +31,19 @@ class Item extends StatelessWidget {
                   topLeft: Radius.circular(4.0)),
               child: Stack(
                 children: <Widget>[
-                  CachedNetworkImage(
-                      imageUrl: image,
-                      height: width * 0.3,
-                      width: width * 0.4,
-                      fit: BoxFit.cover),
+                  Hero(
+                    tag: "${name}",
+                                      child: CachedNetworkImage(
+                        imageUrl: image,
+                        height: width * 0.3,
+                        width: width * 0.4,
+                        fit: BoxFit.cover),
+                  ),
                   Container(
                     alignment: Alignment.topRight,
                     padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.favorite_border,
-                        color: Colors.white, size: 18),
+                    // child: Icon(Icons.favorite_border,
+                    //     color: Colors.white, size: 18),
                   )
                 ],
               ),
