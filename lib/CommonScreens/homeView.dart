@@ -1,7 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/Admin/addproduct.dart';
+import 'package:canteen_app/Admin/adminDrawer.dart';
 import 'package:canteen_app/Authentications/dashboard.dart';
+import 'package:canteen_app/CommonScreens/description.dart';
 import 'package:canteen_app/Helpers/Item.dart';
 import 'package:canteen_app/Helpers/collection.dart';
 import 'package:canteen_app/Helpers/dataGenerator.dart';
@@ -10,12 +12,13 @@ import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Model/categoryModel.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Services/signin.dart';
+import 'package:canteen_app/Users/userDrawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'Helpers/flutter_rating_bar.dart';
+import '../Helpers/flutter_rating_bar.dart';
 
 
 class HomeView extends StatefulWidget {
@@ -27,7 +30,9 @@ class _HomeViewState extends State<HomeView> {
 
   List<CategoryModel> Listings1;
   List<DashboardCollections> dashlistings;
+  bool isPress=false;
   AuthService _auth = new AuthService();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -52,6 +57,7 @@ class _HomeViewState extends State<HomeView> {
                 backgroundColor: Colors.white,
               )
            ),
+            drawer: role=="user"? UserDrawer() : AdminDrawer() ,
             body: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
@@ -72,12 +78,12 @@ class _HomeViewState extends State<HomeView> {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                             IconButton(
-                               icon: Icon(Icons.menu, color: Colors.black,size: 25,),
-                               onPressed: () {
-
-                               },
-                             ),
+                             // IconButton(
+                             //   icon: Icon(Icons.menu, color: Colors.black,size: 25,),
+                             //   onPressed: () {
+                             //     _scaffoldKey.currentState.openDrawer();
+                             //   },
+                             // ),
                           SizedBox(width: 10,),
                           text('Home', textColor: Colors.black, fontSize: 25.0, fontFamily: 'Bold'),
                         ],
@@ -102,6 +108,7 @@ class _HomeViewState extends State<HomeView> {
                             onPressed: () async {
                               await _auth.signOutGoogle();
                               await _auth.signOut();
+                              await _auth.signOutFB();
                               Navigator.pushAndRemoveUntil(context,
                                   MaterialPageRoute(
                                     builder: (context) {
@@ -209,7 +216,14 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      mHeading("Fast Food"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          mHeading("Fast Food"),
+                          mViewAll(context, "View All",
+                              tags: null),
+                        ],
+                      ),
                       StreamBuilder(
                         stream: FirebaseFirestore.instance
                             .collection('FastFood').limit(4)
@@ -249,94 +263,98 @@ class _HomeViewState extends State<HomeView> {
                                         DocumentSnapshot fastfood =
                                         snapshot.data.docs[index];
                                         print(snapshot.data.docs[index].id);
-                                        return Container(
-                                          margin: EdgeInsets.only(bottom: 16),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Container(
-                                                height: width * 0.32,
-                                                width: width * 0.32,
-                                                child: Stack(
-                                                  children: <Widget>[
-                                                    ClipRRect(
-                                                      borderRadius: new BorderRadius.circular(12.0),
-                                                      child: CachedNetworkImage(
-                                                        imageUrl: fastfood.data()['image'],
-                                                        fit: BoxFit.fill,
-                                                        height: width * 0.32,
-                                                        width: width * 0.32,
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment: Alignment.topRight,
-                                                      child: Container(
-                                                        margin: EdgeInsets.only(right: 10, top: 10),
-                                                        child: Icon(
-                                                          Icons.favorite_border,
-                                                          color: Colors.white,
-                                                          size: 20,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    text(fastfood.data()['Itemname']),
-                                                    // text(mListings[index].address,
-                                                    //     maxLine: 1,
-                                                    //     textColor: t7textColorSecondary,
-                                                    //     fontSize: textSizeSMedium),
-                                                    SizedBox(
-                                                      height: 2,
-                                                    ),
-                                                    Row(
-                                                      children: <Widget>[
-                                                        RatingBar(
-                                                          initialRating: fastfood.data()['rating'].toDouble(),
-                                                          minRating: 1,
-                                                          itemSize: 16,
-                                                          direction: Axis.horizontal,
-                                                          itemPadding:
-                                                          EdgeInsets.symmetric(horizontal: 1.0),
-                                                          itemBuilder: (context, _) => Icon(
-                                                            Icons.star,
-                                                            color: Colors.amber,
+                                        return GestureDetector(
+                                          onTap: (){
+                                            Navigator.push(context,
+                                                MaterialPageRoute(builder: (context) => Description(image: fastfood.data()['image'],name: fastfood.data()['Itemname'],description: fastfood.data()['description'],amount: fastfood.data()['amount'],category: fastfood.data()['category'],review: fastfood.data()['rating'],)));
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(bottom: 16),
+                                            child: Row(
+                                              children: <Widget>[
+                                                Container(
+                                                  height: width * 0.32,
+                                                  width: width * 0.32,
+                                                  child: Stack(
+                                                    children: <Widget>[
+                                                      ClipRRect(
+                                                        borderRadius: new BorderRadius.circular(12.0),
+                                                        child: Hero(
+                                                          tag: "${fastfood.data()['Itemname']}",
+                                                          child: CachedNetworkImage(
+                                                            imageUrl: fastfood.data()['image'],
+                                                            fit: BoxFit.fill,
+                                                            height: width * 0.32,
+                                                            width: width * 0.32,
                                                           ),
-                                                          onRatingUpdate: (rating) {},
                                                         ),
-                                                        SizedBox(width: 2,),
-                                                        text("7 "+"reviews",
-                                                            textColor: Color(0xFF9D9D9D),
-                                                            fontSize: 14.0),
-                                                      ],
-                                                    ),
-                                                    text1("\$" + fastfood.data()['amount'],
-                                                        textColor: Color(0xFF9D9D9D),
-                                                        fontSize: 14.0),
-                                                    text1(fastfood.data()['description'].substring(0,50)+"...",
-                                                        maxLine: 1,
-                                                        isLongText: true,
-                                                        textColor: Color(0xFF9D9D9D),
-                                                        fontSize: 14.0),
-                                                    SizedBox(
-                                                      height: 8,
-                                                    ),
-                                                    Divider(
-                                                      height: 1,
-                                                      color: Color(0xFFDADADA),
-                                                      thickness: 1,
-                                                    )
-                                                  ],
+                                                      ),
+                                                      Align(
+                                                        alignment: Alignment.topRight,
+                                                        child: Container(
+                                                          margin: EdgeInsets.only(right: 10, top: 10),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              )
-                                            ],
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      text(fastfood.data()['Itemname']),
+                                                      // text(mListings[index].address,
+                                                      //     maxLine: 1,
+                                                      //     textColor: t7textColorSecondary,
+                                                      //     fontSize: textSizeSMedium),
+                                                      SizedBox(
+                                                        height: 2,
+                                                      ),
+                                                      Row(
+                                                        children: <Widget>[
+                                                          RatingBar(
+                                                            initialRating: fastfood.data()['rating'].toDouble(),
+                                                            minRating: 1,
+                                                            itemSize: 16,
+                                                            direction: Axis.horizontal,
+                                                            itemPadding:
+                                                            EdgeInsets.symmetric(horizontal: 1.0),
+                                                            itemBuilder: (context, _) => Icon(
+                                                              Icons.star,
+                                                              color: Colors.amber,
+                                                            ),
+                                                            onRatingUpdate: (rating) {},
+                                                          ),
+                                                          SizedBox(width: 2,),
+                                                          text("7 "+"reviews",
+                                                              textColor: Color(0xFF9D9D9D),
+                                                              fontSize: 14.0),
+                                                        ],
+                                                      ),
+                                                      text1("\$" + fastfood.data()['amount'],
+                                                          textColor: Color(0xFF9D9D9D),
+                                                          fontSize: 14.0),
+                                                      text1(fastfood.data()['description'].substring(0,50)+"...",
+                                                          maxLine: 1,
+                                                          isLongText: true,
+                                                          textColor: Color(0xFF9D9D9D),
+                                                          fontSize: 14.0),
+                                                      SizedBox(
+                                                        height: 8,
+                                                      ),
+                                                      Divider(
+                                                        height: 1,
+                                                        color: Color(0xFFDADADA),
+                                                        thickness: 1,
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         );
                                       }),
@@ -344,8 +362,7 @@ class _HomeViewState extends State<HomeView> {
                             }
                           }
                       ),
-                      mViewAll(context, "View All",
-                          tags: null),
+
                     ],
                   ),
                 ),
@@ -355,29 +372,14 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      mHeading("Get Inspired By Collections"),
-                      SizedBox(
-                        height: 250,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: dashlistings.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Collection(
-                                dashlistings[index], index);
-                          },
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          mHeading("Drinks"),
+                          mViewAll(context, "View All",
+                              tags:null),
+                        ],
                       ),
-                      SizedBox(height: 16.0),
-                    ],
-                  ),
-                ),
-                Container(
-                  decoration: boxDecoration(showShadow: true, radius: 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      mHeading("Drinks"),
                       StreamBuilder(
                           stream: FirebaseFirestore.instance
                               .collection('Drinks').limit(4)
@@ -418,7 +420,7 @@ class _HomeViewState extends State<HomeView> {
                                       DocumentSnapshot drinks =
                                       snapshot.data.docs[index];
                                       print(snapshot.data.docs[index].id);
-                                      return Item(name:drinks.data()['Itemname'],image: drinks.data()['image'], price: drinks.data()['amount'],rating: drinks.data()['rating'],);
+                                      return Item(name:drinks.data()['Itemname'],image: drinks.data()['image'], price: drinks.data()['amount'],rating: drinks.data()['rating'],description: drinks.data()['description'],category: drinks.data()['category'],);
                                     },
                                   ),
                                 );
@@ -426,8 +428,94 @@ class _HomeViewState extends State<HomeView> {
                           }
                       ),
                       SizedBox(height: 5,),
-                      mViewAll(context, "View All",
-                          tags:null),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Container(
+                  decoration: boxDecoration(showShadow: true, radius: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      mHeading("Get Inspired By Collections"),
+                      SizedBox(
+                        height: 250,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: dashlistings.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Collection(
+                                dashlistings[index], index);
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16.0,),
+                Container(
+                  decoration: boxDecoration(showShadow: true, radius: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          mHeading("Desserts"),
+                          mViewAll(context, "View All",
+                              tags:null),
+                        ],
+                      ),
+                      StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('Desserts').limit(4)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('We got an Error ${snapshot.error}');
+                            }
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return Center(
+                                  child: Container(
+                                    child: Theme(
+                                      data: ThemeData.light(),
+                                      child: CupertinoActivityIndicator(
+                                        animating: true,
+                                        radius: 20,
+                                      ),
+                                    ),
+                                  ),
+                                );
+
+                              case ConnectionState.none:
+                                return Text('oops no data');
+
+                              case ConnectionState.done:
+                                return Text('We are Done');
+                              default:
+                                return SizedBox(
+                                  height: 240,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    padding:
+                                    EdgeInsets.only(bottom: 8.0),
+                                    itemCount: snapshot.data.docs.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      DocumentSnapshot drinks =
+                                      snapshot.data.docs[index];
+                                      print(snapshot.data.docs[index].id);
+                                      return Item(name:drinks.data()['Itemname'],image: drinks.data()['image'], price: drinks.data()['amount'],rating: drinks.data()['rating'],description: drinks.data()['description'],category: drinks.data()['category'],);
+                                    },
+                                  ),
+                                );
+                            }
+                          }
+                      ),
+                      SizedBox(height: 5,),
                     ],
                   ),
                 ),
@@ -494,7 +582,7 @@ class Filter extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Container(
-      margin: EdgeInsets.only(left: 16),
+      margin: EdgeInsets.only(left: 8,right: 8),
       child: Column(
         children: <Widget>[
           Container(

@@ -1,10 +1,11 @@
 import 'package:auth_buttons/res/buttons/facebook_auth_button.dart';
 import 'package:auth_buttons/res/buttons/google_auth_button.dart';
 import 'package:auth_buttons/res/shared/auth_style.dart';
+import 'package:canteen_app/Authentications/mobile.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Services/signin.dart';
-import 'package:canteen_app/homeView.dart';
+import 'file:///C:/Users/mohit/AndroidStudioProjects/canteen_app/lib/CommonScreens/homeView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -299,12 +300,19 @@ class _DashboardState extends State<Dashboard> {
                               (result) async {
                             if (result != null) {
                               await fetchData();
-                              Navigator.pushAndRemoveUntil(context,
+                              if(phn==null){
+                                Navigator.push(context,
+                                                MaterialPageRoute(builder: (context) => Mobile()));
+
+                              } else {
+                                Navigator.pushAndRemoveUntil(context,
                                   MaterialPageRoute(
                                     builder: (context) {
                                       return HomeView();
                                     },
                                   ), (route) => false);
+                              }
+                              
                             }
                           },
                         );
@@ -368,12 +376,18 @@ class _DashboardState extends State<Dashboard> {
                                   (result) async {
                                 if (result != null) {
                                   await fetchData();
-                                  Navigator.pushAndRemoveUntil(context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return HomeView();
-                                        },
-                                      ), (route) => false);
+                                  if(phn==null){
+                                Navigator.push(context,
+                                                MaterialPageRoute(builder: (context) => Mobile()));
+
+                              } else {
+                                Navigator.pushAndRemoveUntil(context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return HomeView();
+                                    },
+                                  ), (route) => false);
+                              }
 
                                 }
                               },
@@ -389,13 +403,18 @@ class _DashboardState extends State<Dashboard> {
                                   (result) async {
                                 if (result != null) {
                                   await fetchData();
-                                  Navigator.pushAndRemoveUntil(context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return HomeView();
-                                        },
-                                      ), (route) => false);
+                                  if(phn==null){
+                                Navigator.push(context,
+                                                MaterialPageRoute(builder: (context) => Mobile()));
 
+                              } else {
+                                Navigator.pushAndRemoveUntil(context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return HomeView();
+                                    },
+                                  ), (route) => false);
+                              }
                                 }
                               },
                             );

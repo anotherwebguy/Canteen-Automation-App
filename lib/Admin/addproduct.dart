@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
-import 'package:canteen_app/homeView.dart';
+import 'file:///C:/Users/mohit/AndroidStudioProjects/canteen_app/lib/CommonScreens/homeView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,4 +1,6 @@
+import 'package:canteen_app/Helpers/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 Widget text(
@@ -78,6 +80,15 @@ BoxDecoration boxDecoration1({double radius = 2, Color color = Colors.transparen
       boxShadow: showShadow ? [BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 10, spreadRadius: 2)] : [BoxShadow(color: Colors.transparent)],
       border: Border.all(color: color),
       borderRadius: BorderRadius.all(Radius.circular(radius)));
+}
+
+BoxDecoration ratingbox({double radius = 2, Color color = Colors.transparent, Color bgColor = Colors.white, var showShadow = false}) {
+  return BoxDecoration(
+    color: bgColor,
+    boxShadow: showShadow ? [BoxShadow(color: Color(0X95E9EBF0), blurRadius: 10, spreadRadius: 2)] : [BoxShadow(color: Colors.transparent)],
+    border: Border.all(color: color),
+    borderRadius: BorderRadius.all(Radius.circular(radius)),
+  );
 }
 
 BoxDecoration boxDecoration2(
@@ -203,3 +214,59 @@ Widget formField( context,hint,
   );
 }
 
+BoxDecoration boxDecoration4({double radius = 10.0, Color color = Colors.transparent, Color bgColor = const Color(0xFFffffff), var showShadow = false}) {
+  return BoxDecoration(
+    color: bgColor,
+    boxShadow: showShadow ? [BoxShadow(color: Color(0X95E9EBF0), blurRadius: 6, spreadRadius: 2)] : [BoxShadow(color: Colors.transparent)],
+    border: Border.all(color: color),
+    borderRadius: BorderRadius.all(Radius.circular(radius)),
+  );
+}
+
+BoxDecoration gradientBoxDecoration({double radius = 10.0, Color color = Colors.transparent, Color gradientColor2 = const Color(0xFFffffff), Color gradientColor1 = const Color(0xFFffffff), var showShadow = false}) {
+  return BoxDecoration(
+    gradient: LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [gradientColor1, gradientColor2]),
+    boxShadow: showShadow ? [BoxShadow(color: Color(0X95E9EBF0), blurRadius: 10, spreadRadius: 2)] : [BoxShadow(color: Colors.transparent)],
+    border: Border.all(color: color),
+    borderRadius: BorderRadius.all(Radius.circular(radius)),
+  );
+}
+
+BoxDecoration mobile({double radius = spacing_middle, Color color = Colors.transparent, Color bgColor = Colors.white,var showShadow = false}) {
+  return BoxDecoration(
+    color: bgColor,
+    boxShadow: showShadow ? [BoxShadow(color: Color(0X95E9EBF0), blurRadius: 10, spreadRadius: 2)] : [BoxShadow(color: Colors.transparent)],
+    border: Border.all(color: color),
+    borderRadius: BorderRadius.all(Radius.circular(radius)),
+  );
+}
+
+Widget mTop(BuildContext context, var title, {var tags}) {
+  var width = MediaQuery.of(context).size.width;
+  return Container(
+    width: MediaQuery.of(context).size.width,
+    height: width * 0.15,
+    color: Colors.white,
+    child: Stack(
+      children: <Widget>[
+        GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                margin: EdgeInsets.only(left: spacing_standard_new),
+                width: width * 0.1,
+                height: width * 0.1,
+                decoration: mobile(showShadow: false, bgColor: Color(0xFF494FFB)),
+                child: Icon(Icons.keyboard_arrow_left, color: Colors.white),
+              ),
+            )),
+        Center(
+          child: text(title, fontFamily: 'Bold', fontSize: textSizeLargeMedium, textAllCaps: true),
+        ),
+      ],
+    ),
+  );
+}
