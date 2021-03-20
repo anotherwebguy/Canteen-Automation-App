@@ -2,7 +2,7 @@ import 'package:canteen_app/Authentications/dashboard.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Services/signin.dart';
-import 'file:///C:/Users/mohit/AndroidStudioProjects/canteen_app/lib/CommonScreens/homeView.dart';
+
 import 'package:flutter/material.dart';
 
 class UserDrawer extends StatefulWidget {

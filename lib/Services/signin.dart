@@ -24,7 +24,7 @@ class AuthService{
     final profile = JSON.jsonDecode(graphResponse.body);
     if (user != null) {
       // Checking if email and name is null
-      assert(user.email != null);
+      //assert(user.email != null);
       assert(user.displayName != null);
       assert(user.photoURL != null);
 
