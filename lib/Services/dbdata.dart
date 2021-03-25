@@ -57,7 +57,7 @@ Future<void> fetchData() async {
   } catch (e) {}
 }
 
-Future<void> addFoodItemCategoryWise(String category, String name, String description, String amount, String path, List searchString) async {
+Future<void> addFoodItemCategoryWise(String category, String name, String description, String amount, String path, List searchString, String type) async {
   return await FirebaseFirestore.instance.collection(category).add({
     'Itemname': name,
     'description': description,
@@ -66,10 +66,11 @@ Future<void> addFoodItemCategoryWise(String category, String name, String descri
     'category': category,
     'rating': 0,
     'searchString': searchString,
+    'type':type
   });
 }
 
-Future<void> addFoodItemAllSection(String name, String description, String amount, String path, List searchString) async {
+Future<void> addFoodItemAllSection(String name, String description, String amount, String path, List searchString, String type) async {
   return await FirebaseFirestore.instance.collection("All").add({
     'Itemname': name,
     'description': description,
@@ -78,5 +79,16 @@ Future<void> addFoodItemAllSection(String name, String description, String amoun
     'category': "All",
     'rating': 0,
     'searchString': searchString,
+    'type':type
+  });
+}
+
+Future<void> addFoodItemToCart(String name, String quantity, String amount, String type, String path) async {
+  return await FirebaseFirestore.instance.collection("admins").doc(FirebaseAuth.instance.currentUser.uid).collection("cart").add({
+    'Itemname': name,
+    'amount': amount,
+    'image': path,
+    'quantity': quantity,
+    'type': type,
   });
 }

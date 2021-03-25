@@ -2,12 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/Helpers/extensions.dart';
 import 'package:canteen_app/Helpers/percent_indicator.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
+import 'package:canteen_app/Users/cart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:canteen_app/Helpers/constants.dart';
+import 'package:canteen_app/Services/dbdata.dart';
 
 class Description extends StatefulWidget {
-  final String image, name, description, amount, category;
+  final String image, name, description, amount, category, type;
   final num review;
   Description(
       {this.image,
@@ -15,7 +19,8 @@ class Description extends StatefulWidget {
       this.description,
       this.amount,
       this.category,
-      this.review});
+      this.review,
+      this.type});
 
   @override
   _DescriptionState createState() => _DescriptionState();
@@ -32,11 +37,38 @@ class _DescriptionState extends State<Description> {
   double twoStar = 0;
   double oneStar = 0;
   int cartcounter = 1;
+  int counter = 0;
 
   @override
   void initState() {
     super.initState();
     // fetchData();
+    counter = 0;
+    checkForCart();
+  }
+
+  Future<void> checkForCart() async {
+    await FirebaseFirestore.instance
+        .collection('admins')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection('cart')
+        .snapshots()
+        .listen((event) {
+      setState(() {
+        counter = event.docs.length;
+      });
+    });
+  }
+
+  Widget mVegOption(var value, var iconColor) {
+    return Row(
+      children: <Widget>[
+        Image.asset("assets/food_c_type.png",
+            color: iconColor, width: 18, height: 18),
+        SizedBox(width: spacing_standard),
+        text(value),
+      ],
+    );
   }
 
   Widget cartIcon(context, cartCount) {
@@ -50,7 +82,7 @@ class _DescriptionState extends State<Description> {
               margin: EdgeInsets.only(right: spacing_standard_new),
               padding: EdgeInsets.all(spacing_standard),
               child: Icon(Icons.shopping_cart)),
-          cartCount > 0
+          counter > 0
               ? Align(
                   alignment: Alignment.topRight,
                   child: Container(
@@ -58,14 +90,23 @@ class _DescriptionState extends State<Description> {
                     padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, color: Colors.red),
-                    child: text(cartCount.toString(),
+                    child: text(counter.toString(),
                         textColor: Colors.white, fontSize: textSizeSmall),
                   ),
                 )
               : Container()
         ],
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Cart(
+              length: counter,
+            ),
+          ),
+        );
+      },
       radius: spacing_standard_new,
     );
   }
@@ -270,6 +311,37 @@ class _DescriptionState extends State<Description> {
             SizedBox(
               height: spacing_standard_new,
             ),
+            widget.type == null || widget.type == "veg"
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                          child: mVegOption("Veg only", Colors.green), flex: 1),
+                      Expanded(
+                          child: mVegOption("Non-Veg only", Color(0xFFDADADA)),
+                          flex: 2),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                          child: mVegOption("Veg only", Color(0xFFDADADA)),
+                          flex: 1),
+                      Expanded(
+                          child: mVegOption("Non-Veg only", Colors.red),
+                          flex: 2),
+                    ],
+                  ),
+            SizedBox(
+              height: spacing_standard_new,
+            ),
+            Divider(
+              height: 1,
+            ),
+            SizedBox(
+              height: spacing_standard_new,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -337,9 +409,6 @@ class _DescriptionState extends State<Description> {
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: spacing_standard_new,
             ),
           ],
         ),
@@ -469,7 +538,7 @@ class _DescriptionState extends State<Description> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Divider(height:3),
+              child: Divider(height: 3),
             )
             // reviews
           ],
@@ -528,8 +597,7 @@ class _DescriptionState extends State<Description> {
                                       children: <Widget>[
                                         Container(
                                           margin: EdgeInsets.only(
-                                              top: 20.0 /
-                                                  4), //top padding 5
+                                              top: 20.0 / 4), //top padding 5
                                           height: 4,
                                           width: 60,
                                           color: Colors.black,
@@ -557,7 +625,8 @@ class _DescriptionState extends State<Description> {
                                                 SizedBox(
                                                   height: 5,
                                                 ),
-                                                text1(widget.name,fontSize: 20.0),
+                                                text1(widget.name,
+                                                    fontSize: 20.0),
                                               ],
                                             ),
                                             Column(
@@ -576,20 +645,25 @@ class _DescriptionState extends State<Description> {
                                                 SizedBox(
                                                   height: 5,
                                                 ),
-                                                text1(cartcounter.toString(),fontSize: 20.0),
+                                                text1(cartcounter.toString(),
+                                                    fontSize: 20.0),
                                               ],
                                             )
                                           ],
                                         ),
-                                        SizedBox(height: 15,),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
                                         Text(
-                                              "Total price:                     "+(int.parse(widget.amount)*cartcounter).toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
+                                          "Total price:                     " +
+                                              (int.parse(widget.amount) *
+                                                      cartcounter)
+                                                  .toString(),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "Regular",
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -611,7 +685,41 @@ class _DescriptionState extends State<Description> {
                   ],
                 ),
                 GestureDetector(
-                  onTap: () async {},
+                  onTap: () async {
+                    await addFoodItemToCart(
+                        widget.name,
+                        cartcounter.toString(),
+                        (int.parse(widget.amount) * cartcounter).toString(),
+                        widget.type,
+                        widget.image);
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        backgroundColor: Colors.white,
+                        title: Text("Confirmation",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold)),
+                        content: Text(
+                          "This Food Item has been added to your cart",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        actions: [
+                          FlatButton(
+                            child: Text(
+                              "Ok",
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ),
+                            ),
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
                     decoration: gradientBoxDecoration(
@@ -661,9 +769,10 @@ class _DescriptionState extends State<Description> {
                 return <Widget>[
                   SliverAppBar(
                     expandedHeight: 440,
-                    floating: false,
+                    floating: true,
                     pinned: true,
                     titleSpacing: 0,
+                    forceElevated: innerBoxIsScrolled,
                     backgroundColor: Colors.white,
                     iconTheme: IconThemeData(color: Color(0xFF212121)),
                     actionsIconTheme: IconThemeData(color: Color(0xFF212121)),

@@ -6,6 +6,7 @@ const textSizeNormal = 20.0;
 const textSizeXNormal = 22.0;
 const textSizeLarge = 24.0;
 const textSizeXLarge = 30.0;
+const kDefaultPaddin = 20.0;
 
 
 const spacing_control_half = 2.0;

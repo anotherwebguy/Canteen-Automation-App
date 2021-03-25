@@ -5,9 +5,9 @@ import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:flutter/material.dart';
 
 class Item extends StatelessWidget {
-  String name,image,price,description,category;
+  String name,image,price,description,category,type;
   int rating;
-  Item({this.name,this.image,this.price,this.rating,this.description,this.category});
+  Item({this.name,this.image,this.price,this.rating,this.description,this.category,this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class Item extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Description(image: image,name: name,description: description,amount: price, category: category,review: rating,)));
+            MaterialPageRoute(builder: (context) => Description(image: image,name: name,description: description,amount: price, category: category,review: rating,type: type)));
 
       },
       child: Container(

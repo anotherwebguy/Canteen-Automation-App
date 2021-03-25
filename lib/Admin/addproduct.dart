@@ -19,7 +19,7 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  final list = ["FastFood","Drinks","Dinner","Desserts","All"];
+  final list = ["FastFood","Drinks","Desserts","All"];
   final quantity = TextEditingController();
   TextEditingController name = new TextEditingController();
   TextEditingController rating = new TextEditingController();
@@ -29,7 +29,8 @@ class _AddProductState extends State<AddProduct> {
   File img1;
   String path1="";
   bool isLoading = false;
-  List<String> listOfCategory = ["FastFood","Drinks","Dinner","Desserts"];
+  String type=null;
+  List<String> listOfCategory = ["FastFood","Drinks","Desserts"];
   String selectedIndexCategory = 'FastFood';
 
 
@@ -199,6 +200,44 @@ class _AddProductState extends State<AddProduct> {
                   formField(context,"Item name", prefixIcon: Icons.fastfood,controller: name,keyboardType: TextInputType.text).paddingTop(8.0),
                   text2("Description",textColor: Color(0xFF1e253a)).paddingTop(8.0),
                   formField(context,"Description", prefixIcon: Icons.description,controller: description,keyboardType: TextInputType.multiline).paddingTop(8.0),
+                  text2("Type",textColor: Color(0xFF1e253a)).paddingTop(8.0),
+                  Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.start,
+                direction: Axis.horizontal,
+                children: [
+                  Theme(
+                    data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.black),
+                    child: Radio(
+                      value: 'veg',
+                      groupValue: type,
+                      onChanged: (value) {
+                        setState(() {
+                          type = value;
+                          toast("$type Selected");
+                        });
+                      },
+                    ),
+                  ),
+                  Text('Veg only', style: primaryTextStyle()),
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      unselectedWidgetColor: Colors.black,
+                    ),
+                    child: Radio(
+                      value: 'Non-Veg',
+                      groupValue: type,
+                      onChanged: (value) {
+                        setState(() {
+                          type = value;
+                          toast("$type Selected");
+                        });
+                      },
+                    ),
+                  ),
+                  Text('Non-Veg only', style: primaryTextStyle()),
+                ],
+              ),
                   text2("Amount",textColor: Color(0xFF1e253a)).paddingTop(8.0),
                   formField(context,"Enter the amount", prefixIcon: Icons.attach_money,controller: price,keyboardType: TextInputType.number).paddingTop(8.0),
                   SizedBox(
@@ -211,7 +250,7 @@ class _AddProductState extends State<AddProduct> {
                           borderRadius: new BorderRadius.circular(8.0)),
                       color: Color(0xFF3d87ff),
                       onPressed: () async {
-                        if(img1!="" && name.text!="" && description.text!=null && price.text!=null ){
+                        if(img1!="" && name.text!="" && description.text!=null && price.text!=null && type!=null){
                             setState(() {
                                isLoading=true;
                             });
@@ -221,8 +260,8 @@ class _AddProductState extends State<AddProduct> {
                             await uploadFileImage();
                             search(name.text);
                             Future.delayed(const Duration(seconds: 5), () {
-                              addFoodItemCategoryWise(selectedIndexCategory, name.text, description.text, price.text, path1,searchString);
-                              addFoodItemAllSection(name.text, description.text, price.text, path1,searchString);
+                              addFoodItemCategoryWise(selectedIndexCategory, name.text, description.text, price.text, path1,searchString,type);
+                              addFoodItemAllSection(name.text, description.text, price.text, path1,searchString,type);
                               setState(() {
                                 isLoading = false;
                               });

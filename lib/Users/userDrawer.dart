@@ -1,7 +1,11 @@
 import 'package:canteen_app/Authentications/dashboard.dart';
+import 'package:canteen_app/CommonScreens/homeView.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Services/signin.dart';
+import 'package:canteen_app/Users/cart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 
@@ -14,13 +18,30 @@ class _UserDrawerState extends State<UserDrawer> {
   var selectedItem = -1;
   List<String> username = new List();
   AuthService _auth = new AuthService();
+  int counter=0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     username=name.split(' ');
+    counter=0;
+    checkForCart();
   }
+  
+  Future<void> checkForCart() async {
+    await FirebaseFirestore.instance
+        .collection('admins')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection('cart')
+        .snapshots()
+        .listen((event) {
+      setState(() {
+        counter = event.docs.length;
+      });
+    });
+  }
+
 
   Widget getDrawerItem(IconData icon, String name, int pos,{var tags,ind}) {
     return GestureDetector(
@@ -140,7 +161,7 @@ class _UserDrawerState extends State<UserDrawer> {
                                         fontSize: 20.0),
                                   ),
                                   SizedBox(height: 8),
-                                  text("7507203829",
+                                  text(phn.toString(),
                                       textColor: Colors.white,
                                       fontSize: 14.0),
                                 ],
@@ -156,7 +177,7 @@ class _UserDrawerState extends State<UserDrawer> {
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
-                getDrawerItem( Icons.shopping_cart,"Your Cart", 2),
+                getDrawerItem( Icons.shopping_cart,"Your Cart", 2,tags: Cart(length: counter,)),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),

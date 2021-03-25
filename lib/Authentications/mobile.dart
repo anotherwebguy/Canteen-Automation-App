@@ -183,6 +183,7 @@ class _MobileState extends State<Mobile> {
                           onPressed: () async{
                             if(profileimg!=null){
                               await addphnandphoto(FirebaseAuth.instance.currentUser.uid, profileimg, phone.text);
+                              await fetchData();
                             Navigator.pushAndRemoveUntil(context,
                                   MaterialPageRoute(
                                     builder: (context) {
@@ -193,6 +194,7 @@ class _MobileState extends State<Mobile> {
                             } else {
                               await uploadProfileImg();
                               await addphnandphoto(FirebaseAuth.instance.currentUser.uid, path1, phone.text);
+                              await fetchData();
                             Navigator.pushAndRemoveUntil(context,
                                   MaterialPageRoute(
                                     builder: (context) {
