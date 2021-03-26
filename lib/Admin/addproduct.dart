@@ -98,7 +98,7 @@ class _AddProductState extends State<AddProduct> {
     words = a.split(' ');
     for (int k = 0; k < words.length; k++) {
       for (int i = 1; i <= words[k].length; i++) {
-        searchString.add(words[k].substring(0, i).trim());
+        searchString.add(words[k].substring(0, i).trim().toLowerCase());
       }
     }
   }

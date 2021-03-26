@@ -3,7 +3,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/Admin/addproduct.dart';
 import 'package:canteen_app/Admin/adminDrawer.dart';
 import 'package:canteen_app/Authentications/dashboard.dart';
+import 'package:canteen_app/CommonScreens/all.dart';
+import 'package:canteen_app/CommonScreens/categories.dart';
 import 'package:canteen_app/CommonScreens/description.dart';
+import 'package:canteen_app/CommonScreens/search.dart';
 import 'package:canteen_app/Helpers/Item.dart';
 import 'package:canteen_app/Helpers/collection.dart';
 import 'package:canteen_app/Helpers/dataGenerator.dart';
@@ -120,7 +123,7 @@ class _HomeViewState extends State<HomeView> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => AddProduct()));
+                                        builder: (context) => Search()));
                               },
                             ),
                             IconButton(
@@ -141,14 +144,6 @@ class _HomeViewState extends State<HomeView> {
                                 ), (route) => false);
                               },
                             ),
-                            // IconButton(
-                            //   icon: Icon(
-                            //     Icons.shopping_cart,
-                            //     color: Colors.black,
-                            //     size: 25,
-                            //   ),
-                            //   onPressed: () {},
-                            // ),
                             Stack(
                               children: <Widget>[
                                 new IconButton(
@@ -293,7 +288,10 @@ class _HomeViewState extends State<HomeView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             mHeading("Fast Food"),
-                            mViewAll(context, "View All", tags: null),
+                            mViewAll(context, "View All",
+                                tags: Categories(
+                                  category: "FastFood",
+                                )),
                           ],
                         ),
                         StreamBuilder(
@@ -517,7 +515,10 @@ class _HomeViewState extends State<HomeView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             mHeading("Drinks"),
-                            mViewAll(context, "View All", tags: null),
+                            mViewAll(context, "View All",
+                                tags: Categories(
+                                  category: "Drinks",
+                                )),
                           ],
                         ),
                         StreamBuilder(
@@ -615,7 +616,10 @@ class _HomeViewState extends State<HomeView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             mHeading("Desserts"),
-                            mViewAll(context, "View All", tags: null),
+                            mViewAll(context, "View All",
+                                tags: Categories(
+                                  category: "Desserts",
+                                )),
                           ],
                         ),
                         StreamBuilder(
@@ -758,23 +762,29 @@ class Filter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    return Container(
-      margin: EdgeInsets.only(left: 8, right: 8),
-      child: Column(
-        children: <Widget>[
-          Container(
-            decoration: boxDecoration(bgColor: model.color, radius: 12),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SvgPicture.asset(
-                model.img,
-                height: width * 0.12,
-                width: width * 0.12,
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context,
+              MaterialPageRoute(builder: (context) => model.tags));
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 8, right: 8),
+        child: Column(
+          children: <Widget>[
+            Container(
+              decoration: boxDecoration(bgColor: model.color, radius: 12),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: SvgPicture.asset(
+                  model.img,
+                  height: width * 0.12,
+                  width: width * 0.12,
+                ),
               ),
             ),
-          ),
-          text(model.name, textColor: Color(0xFF757575))
-        ],
+            text(model.name, textColor: Color(0xFF757575))
+          ],
+        ),
       ),
     );
   }

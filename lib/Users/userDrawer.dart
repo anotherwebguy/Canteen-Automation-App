@@ -1,4 +1,5 @@
 import 'package:canteen_app/Authentications/dashboard.dart';
+import 'package:canteen_app/CommonScreens/all.dart';
 import 'package:canteen_app/CommonScreens/homeView.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
@@ -182,7 +183,7 @@ class _UserDrawerState extends State<UserDrawer> {
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
-                getDrawerItem(Icons.favorite_border, "Favorites", 3),
+                getDrawerItem(Icons.food_bank_sharp, "All Categories", 3,tags: AllCat()),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),

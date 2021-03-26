@@ -17,7 +17,8 @@ class Collection extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
-
+        Navigator.push(context,
+              MaterialPageRoute(builder: (context) => model.tags));
       },
       child: Container(
         margin: EdgeInsets.only(left: 16.0),
