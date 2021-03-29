@@ -1,11 +1,16 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/Helpers/constants.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
+import 'package:canteen_app/Users/var.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:flutter_beautiful_popup/main.dart';
 
 class Cart extends StatefulWidget {
   final int length;
@@ -16,13 +21,63 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  int amount;
+  //Razorpay payment
+  Razorpay _razorpay = Razorpay();
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    Fluttertoast.showToast(
+        msg: "Payment successful", timeInSecForIosWeb: 4);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Fluttertoast.showToast(
+        msg: "ERROR:" + response.code.toString() + " - " + response.message,
+        timeInSecForIosWeb: 4);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET: " + response.walletName, timeInSecForIosWeb: 4);
+  }
+
   List<cartItems> products;
+  List<String> time =["11:00-12:00","12:00-1:00","1:00-2:00"];
+  String selectedIndexCategory;
 
   @override
   void initState() {
     // TODO: implement initState
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
     products = List<cartItems>();
+  }
+
+  @override
+  void dispose(){
+  super.dispose();
+  _razorpay.clear();
+  }
+
+  void openCheckout(int amount) async {
+    var options = {
+      'key': 'rzp_test_ilVZU64kpCLrTf',
+      'amount': amount,
+      'name': 'InstaFood',
+      'description': 'Food Orders',
+      'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e);
+    }
   }
 
   @override
@@ -130,156 +185,59 @@ class _CartState extends State<Cart> {
                             children: <Widget>[
                               Row(
                                 children: [
-                                  text("Tap to view details",
-                                      fontFamily: "Medium", fontSize: 18.0),
+                                  Card(
+                                    elevation: 4,
+                                      child: DropdownButton(                             
+                                      hint: Text("Select Time").paddingLeft(8),
+                                      value: selectedIndexCategory,
+                                      dropdownColor: Colors.white,
+                                      style: boldTextStyle(),
+                                      icon: Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.black,
+                                      ),
+                                       underline: 0.height,
+                                      items: time.map((value){
+                                        return new DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value, style: primaryTextStyle()).paddingLeft(8));
+                                      }).toList(), 
+                                      onChanged: (value){
+                                        setState(() {
+                                          selectedIndexCategory=value;
+                                        });
+                                      },
+                                      ),
+                                  )
                                 ],
                               ),
-                              //text("View Bill Details", textColor: Color(0xFF3B8BEA)),
-                              GestureDetector(
-                                  onTap: () {
-                                    print(products);
-                                    showModalBottomSheet<void>(
-                                      context: context,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                      ),
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          height: 300,
-                                          // color: Colors.white,
-                                          decoration: new BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  new BorderRadius.only(
-                                                      topLeft:
-                                                          const Radius.circular(
-                                                              20.0),
-                                                      topRight:
-                                                          const Radius.circular(
-                                                              20.0))),
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.vertical,
-                                            child: Center(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: kDefaultPaddin /
-                                                            4), //top padding 5
-                                                    height: 4,
-                                                    width: 60,
-                                                    color: Colors.black,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Column(
-                                                        children: [
-                                                          Text(
-                                                            "Items: ",
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontFamily:
-                                                                    "Regular",
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          for (var i
-                                                              in products)
-                                                            Column(
-                                                              children: [
-                                                                Text(
-                                                                  i.title
-                                                                      .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          15),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 3,
-                                                                )
-                                                              ],
-                                                            ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          //Text("Total: ",style: TextStyle(fontSize: 20,fontFamily: "Regular",fontWeight: FontWeight.bold),),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        children: [
-                                                          Text(
-                                                            "Quantities: ",
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontFamily:
-                                                                    "Regular",
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          for (var i
-                                                              in products)
-                                                            Column(
-                                                              children: [
-                                                                Text( "x "+                                                              
-                                                                      i.quantity
-                                                                          .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          15),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 3,
-                                                                )
-                                                              ],
-                                                            ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          //Text(cartTotal,style: TextStyle(fontSize: 20,fontFamily: "Regular",fontWeight: FontWeight.bold),),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: Text(
-                                    "View Bill Details",
-                                    style: TextStyle(
-                                        color: Color(0xFF3B8BEA),
-                                        fontSize: 18.0,
-                                        fontFamily: "Regular",
-                                        letterSpacing: 0.5,
-                                        height: 1.5,
-                                        decoration: TextDecoration.underline),
-                                  ))
+                              
                             ],
                           ),
                           GestureDetector(
-                            onTap: () async {},
+                            onTap: () async {
+                              //openCheckout(40*100);
+                              final popup = BeautifulPopup(
+                              context: context,
+                              template: TemplateGreenRocket,);
+                              popup.show(
+                              title: "Payment Mode",
+                              content: MyStatefulWidget(), 
+                              actions: [
+                                popup.button(
+                                  label: "OK",
+                                  onPressed:(){
+                                    if(method==PaymentMethod.payonline){
+                                      openCheckout(40*100);
+                                    }
+                                    else {
+                                      Fluttertoast.showToast(msg: "Payment done");
+                                    }
+                                    }
+                                ),
+                              ],
+                            );
+                            },
                             child: Container(
                               padding:
                                   EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
@@ -749,5 +707,53 @@ class cartItems {
     this.quantity = quantity;
     this.amount = amount;
     print(this.amount);
+  }
+}
+
+enum PaymentMethod { payonline, token }
+
+/// This is the stateful widget that the main application instantiates.
+class MyStatefulWidget extends StatefulWidget {
+
+  @override
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+}
+
+/// This is the private State class that goes with MyStatefulWidget.
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  PaymentMethod _character = PaymentMethod.payonline;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        ListTile(
+          title: const Text('Pay Online', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),),
+          leading: Radio< PaymentMethod>(
+            value: PaymentMethod.payonline,
+            groupValue: _character,
+            onChanged: (PaymentMethod value) {
+              setState(() {
+                _character = value;
+                method=_character;
+              });
+            },
+          ),
+        ),
+        ListTile(
+          title: const Text('Token', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+          leading: Radio<PaymentMethod>(
+            value: PaymentMethod.token,
+            groupValue: _character,
+            onChanged: (PaymentMethod value) {
+              setState(() {
+                _character = value;
+                method=_character;
+              });
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
