@@ -188,13 +188,18 @@ class _UserDrawerState extends State<UserDrawer> {
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
-                //getDrawerItem(Icons.history, "History", 4),
-                getDrawerItem(Icons.notifications_active, "Notifications", 4),
+                getDrawerItem(Icons.dinner_dining, "My Orders", 4),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
-                getDrawerItem(Icons.logout, "Logout", 5,ind: "log"),
+                //getDrawerItem(Icons.history, "History", 4),
+                getDrawerItem(Icons.notifications_active, "Notifications", 5),
+                Padding(
+                  padding: const EdgeInsets.only(left:15.0,right: 15.0),
+                  child: Divider(color: Color(0XFFDADADA), height: 1),
+                ),
+                getDrawerItem(Icons.logout, "Logout", 6,ind: "log"),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),

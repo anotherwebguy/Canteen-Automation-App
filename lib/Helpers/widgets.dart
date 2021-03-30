@@ -303,3 +303,40 @@ BoxDecoration boxDecorations(
       border: Border.all(color: color),
       borderRadius: BorderRadius.all(Radius.circular(radius)));
 }
+
+class TopBar extends StatefulWidget {
+  var titleName;
+
+  TopBar(var this.titleName);
+
+  @override
+  State<StatefulWidget> createState() {
+    return TopBarState();
+  }
+}
+
+class TopBarState extends State<TopBar> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 60,
+        child: Row(
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+              child: Center(child: text(widget.titleName, fontFamily: 'Bold', fontSize: textSizeLargeMedium, isCentered: true)),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

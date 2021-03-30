@@ -2,12 +2,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/Helpers/constants.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
+import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Users/var.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:flutter_beautiful_popup/main.dart';
@@ -22,12 +24,55 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   int amount;
+  String paymentStatus = "", paymentId="";
+  String docid ="";
+  var date = new DateFormat.yMd().format(new DateTime.now());
+  var timeHour = TimeOfDay.now().hour;
+  var timeMin = TimeOfDay.now().minute;
+  var timePeriod = TimeOfDay.now().period.toString();
+  String timeset,period;
+
+  void setTime() {
+    if(timePeriod == "DayPeriod.am"){
+      if(timeHour == 0){
+        timeHour = 12;
+      }
+      period = "AM";
+      if(timeMin < 10){
+        timeset = timeHour.toString() +":0" + timeMin.toString() +" " + period;
+      }else{
+        timeset = timeHour.toString() +":" + timeMin.toString() +" " + period;
+      }
+
+    }else{
+      if(timeHour == 12){
+        timeHour = 12;
+      }else{
+        timeHour = timeHour - 12;
+      }
+
+      period = "PM";
+      if(timeMin < 10){
+        timeset = timeHour.toString() +":0" + timeMin.toString() +" " + period;
+      }else{
+        timeset = timeHour.toString() +":" + timeMin.toString() +" " + period;
+      }
+    }
+  }
+  
   //Razorpay payment
   Razorpay _razorpay = Razorpay();
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     Fluttertoast.showToast(
         msg: "Payment successful", timeInSecForIosWeb: 4);
+    paymentId = response.paymentId;    
+    String msg = "Success";
+    date = new DateFormat.yMd().format(new DateTime.now());
+    timeHour = TimeOfDay.now().hour;
+    timeMin = TimeOfDay.now().minute;
+    timePeriod = TimeOfDay.now().period.toString();
+    await setTime();
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -41,8 +86,7 @@ class _CartState extends State<Cart> {
         msg: "EXTERNAL_WALLET: " + response.walletName, timeInSecForIosWeb: 4);
   }
 
-  List<cartItems> products;
-  List<String> time =["11:00-12:00","12:00-1:00","1:00-2:00"];
+  List<String> time =["10:00-11:00","11:00-12:00","12:00-1:00","1:00-2:00","2:00-3:00","3:00-4:00"];
   String selectedIndexCategory;
 
   @override
@@ -52,7 +96,7 @@ class _CartState extends State<Cart> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
-    products = List<cartItems>();
+    amount=0;
   }
 
   @override
@@ -67,7 +111,7 @@ class _CartState extends State<Cart> {
       'amount': amount,
       'name': 'InstaFood',
       'description': 'Food Orders',
-      'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
+      'prefill': {'contact': phn, 'email': 'test@razorpay.com'},
       'external': {
         'wallets': ['paytm']
       }
@@ -226,9 +270,9 @@ class _CartState extends State<Cart> {
                               actions: [
                                 popup.button(
                                   label: "OK",
-                                  onPressed:(){
+                                  onPressed:()async {
                                     if(method==PaymentMethod.payonline){
-                                      openCheckout(40*100);
+                                      await openCheckout(amount*100);
                                     }
                                     else {
                                       Fluttertoast.showToast(msg: "Payment done");
@@ -342,6 +386,7 @@ class _CartState extends State<Cart> {
                   );
 
                 default:
+                  amount=0;
                   return ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -350,16 +395,7 @@ class _CartState extends State<Cart> {
                     itemBuilder: (context, index) {
                       DocumentSnapshot cartList = snapshot.data.docs[index];
                       print(snapshot.data.docs[index].id);
-                      if (products.asMap()[index] != null) {
-                        products.removeAt(index);
-                      }
-                      products.insert(
-                          index,
-                          new cartItems(
-                              cartList.data()['Itemname'],
-                              int.parse(cartList.data()['quantity']),
-                              int.parse(cartList.data()['amount'])));
-                      print(products.length);
+                      amount+=int.parse(cartList.data()['amount']);
                       return Slidable(
                         key: ValueKey(index),
                         actionPane: SlidableDrawerActionPane(),
@@ -524,14 +560,6 @@ class _CartState extends State<Cart> {
   //   cartTotal=total.toString();
   // }
 
-  String calcnewTotal() {
-    Future.delayed(const Duration(seconds: 10), () {});
-    int total = 0;
-    for (var i in products) {
-      total += i.quantity;
-    }
-    return total.toString();
-  }
 
   Future<void> deleteCart() async {
     FirebaseFirestore.instance
@@ -698,17 +726,7 @@ class CustomAppBar extends StatelessWidget {
   }
 }
 
-class cartItems {
-  String title;
-  int quantity;
-  int amount;
-  cartItems(title, quantity, unit) {
-    this.title = title;
-    this.quantity = quantity;
-    this.amount = amount;
-    print(this.amount);
-  }
-}
+
 
 enum PaymentMethod { payonline, token }
 
@@ -722,6 +740,13 @@ class MyStatefulWidget extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   PaymentMethod _character = PaymentMethod.payonline;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    method = PaymentMethod.payonline;
+  }
 
   @override
   Widget build(BuildContext context) {

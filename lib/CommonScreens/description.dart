@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/Helpers/extensions.dart';
 import 'package:canteen_app/Helpers/percent_indicator.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
+import 'package:canteen_app/Users/addRating.dart';
 import 'package:canteen_app/Users/cart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -532,6 +533,12 @@ class _DescriptionState extends State<Description> {
                   ),
                   onPressed: () {
                     //showRatingDialog(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserRating(),
+                      ),
+                    );
                   },
                 )
               ],
