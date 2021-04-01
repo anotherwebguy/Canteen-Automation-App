@@ -10,10 +10,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:canteen_app/Helpers/constants.dart';
 import 'package:canteen_app/Services/dbdata.dart';
+import 'package:timeago/timeago.dart' as tAgo;
 
 class Description extends StatefulWidget {
-  final String image, name, description, amount, category, type;
-  final num review;
+  final String image, name, description, amount, category, type, docid;
+  final num review, ratingcount, reviewcount, rate1, rate2, rate3, rate4, rate5;
   Description(
       {this.image,
       this.name,
@@ -21,7 +22,15 @@ class Description extends StatefulWidget {
       this.amount,
       this.category,
       this.review,
-      this.type});
+      this.type,
+      this.docid,
+      this.rate1,
+      this.rate2,
+      this.rate3,
+      this.rate4,
+      this.rate5,
+      this.ratingcount,
+      this.reviewcount});
 
   @override
   _DescriptionState createState() => _DescriptionState();
@@ -44,8 +53,22 @@ class _DescriptionState extends State<Description> {
   void initState() {
     super.initState();
     // fetchData();
+    fiveStar = widget.rate5.toDouble();
+    fourStar = widget.rate4.toDouble();
+    threeStar = widget.rate3.toDouble();
+    twoStar = widget.rate2.toDouble();
+    oneStar = widget.rate1.toDouble();
     counter = 0;
     checkForCart();
+  }
+
+  setRating() {
+    fiveStar = (fiveStar * 100) / widget.ratingcount.toDouble();
+    fourStar = (fourStar * 100) / widget.ratingcount.toDouble();
+    threeStar = (threeStar * 100) / widget.ratingcount.toDouble();
+    twoStar = (twoStar * 100) / widget.ratingcount.toDouble();
+    oneStar = (oneStar * 100) / widget.ratingcount.toDouble();
+    print(fiveStar);
   }
 
   Future<void> checkForCart() async {
@@ -158,7 +181,7 @@ class _DescriptionState extends State<Description> {
                   fontFamily: 'Medium',
                   fontSize: 22.0),
               text1(
-                "\$" + widget.amount + "  ",
+                "Rs " + widget.amount + "  ",
                 textColor: Colors.green,
                 fontSize: 22.0,
                 fontFamily: 'Medium',
@@ -177,20 +200,26 @@ class _DescriptionState extends State<Description> {
                       padding: EdgeInsets.only(
                           left: 12, right: 12, top: 0, bottom: 0),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(spacing_standard_new)),
-                          //color: double.parse(widget.product.average_rating) < 2 ? Colors.red : double.parse(widget.product.average_rating) < 4 ? Colors.orange : Colors.green,
-                          color: Colors.green),
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(spacing_standard_new)),
+                        color: widget.review < 2
+                            ? Colors.red
+                            : widget.review < 4
+                                ? Colors.orange
+                                : Colors.green,
+                        //color: Colors.green
+                      ),
                       child: Row(
                         children: <Widget>[
-                          text("3.0", textColor: Colors.white),
+                          text(widget.review.toString(),
+                              textColor: Colors.white),
                           SizedBox(width: spacing_control_half),
                           Icon(Icons.star, color: Colors.white, size: 12),
                         ],
                       ),
                     ),
                     SizedBox(width: spacing_standard),
-                    text("7  Reviewes"),
+                    text(widget.reviewcount.toString() + "  Reviewes"),
                     // SizedBox(width: spacing_standard),
                     // text("\$"+widget.amount),
                     // SizedBox(width: spacing_standard),
@@ -198,10 +227,6 @@ class _DescriptionState extends State<Description> {
                   ],
                 ),
               ),
-              // Text(
-              //   widget.product.regular_price.toString().toCurrencyFormat(),
-              //   style: TextStyle(color: sh_textColorSecondary, fontFamily: fontRegular, fontSize: textSizeLargeMedium, decoration: TextDecoration.lineThrough),
-              // )
             ],
           ),
           SizedBox(height: spacing_standard),
@@ -229,14 +254,14 @@ class _DescriptionState extends State<Description> {
     //           Row(
     //             crossAxisAlignment: CrossAxisAlignment.start,
     //             children: <Widget>[
-    //               Container(
-    //                 padding: EdgeInsets.only(left: 12, right: 12, top: 1, bottom: 1),
-    //                 decoration: BoxDecoration(
-    //                     borderRadius: BorderRadius.all(Radius.circular(spacing_standard_new)), color: list[index].rating < 2 ? Colors.red : list[index].rating < 4 ? Colors.orange : Colors.green),
-    //                 child: Row(
-    //                   children: <Widget>[text(list[index].rating.toString(), textColor: sh_white), SizedBox(width: spacing_control_half), Icon(Icons.star, color: sh_white, size: 12)],
-    //                 ),
-    //               ),
+    // Container(
+    //   padding: EdgeInsets.only(left: 12, right: 12, top: 1, bottom: 1),
+    //   decoration: BoxDecoration(
+    //       borderRadius: BorderRadius.all(Radius.circular(spacing_standard_new)), color: list[index].rating < 2 ? Colors.red : list[index].rating < 4 ? Colors.orange : Colors.green),
+    //   child: Row(
+    //     children: <Widget>[text(list[index].rating.toString(), textColor: sh_white), SizedBox(width: spacing_control_half), Icon(Icons.star, color: sh_white, size: 12)],
+    //   ),
+    // ),
     //               SizedBox(width: spacing_standard_new),
     //               Expanded(
     //                 child: Column(
@@ -416,6 +441,140 @@ class _DescriptionState extends State<Description> {
       ),
     );
 
+    var reviewscontainer = Container(
+        child: Column(
+      children: [
+        StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('All')
+                .doc(widget.docid)
+                .collection("reviews").orderBy('time',descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('We got an Error ${snapshot.error}');
+              }
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(
+                    child: Container(
+                      child: Theme(
+                        data: ThemeData.light(),
+                        child: CupertinoActivityIndicator(
+                          animating: true,
+                          radius: 20,
+                        ),
+                      ),
+                    ),
+                  );
+
+                case ConnectionState.none:
+                  return Text('oops no data');
+
+                case ConnectionState.done:
+                  return Text('We are Done');
+                default:
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(top: 0.0, bottom: 0.0),
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        DocumentSnapshot reviews = snapshot.data.docs[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            child: Column(
+                              children: [
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              SizedBox(height: 10),
+                                              CircleAvatar(
+                                                radius: 20,
+                                                backgroundImage:
+                                                    CachedNetworkImageProvider(
+                                                  reviews.data()['image'],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(width: 20),
+                                          text(reviews.data()['name'],
+                                              fontSize: 15.0,
+                                              fontFamily: "Bold"),
+                                        ],
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            left: 12,
+                                            right: 12,
+                                            top: 1,
+                                            bottom: 1),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                    spacing_standard_new)),
+                                            color: reviews.data()['rating'] < 2
+                                                ? Colors.red
+                                                : reviews.data()['rating'] < 4
+                                                    ? Colors.orange
+                                                    : Colors.green),
+                                        child: Row(
+                                          children: <Widget>[
+                                            text(
+                                                reviews
+                                                    .data()['rating']
+                                                    .toString(),
+                                                textColor: Colors.white),
+                                            SizedBox(
+                                                width: spacing_control_half),
+                                            Icon(Icons.star,
+                                                color: Colors.white, size: 12)
+                                          ],
+                                        ),
+                                      ),
+                                    ]),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 70.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Flexible(
+                                        child: text1(
+                                          reviews.data()['review'],
+                                          maxLine: 4,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        (tAgo.format(reviews
+                                                .data()['time']
+                                                .toDate()))
+                                            .toString(),
+                                        style: secondaryTextStyle(),
+                                      ),
+                                    ])
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+              }
+            }),
+      ],
+    ));
+
     var reviewsTab = SingleChildScrollView(
       padding: EdgeInsets.only(bottom: 60),
       child: Container(
@@ -442,9 +601,10 @@ class _DescriptionState extends State<Description> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         //reviewText("3", size: 28.0, fontSize: 30, fontFamily: 'Bold'),
-                        reviewText(3.0,
+                        reviewText(widget.review,
                             size: 28.0, fontSize: 30.0, fontFamily: 'Bold'),
-                        text1("7" + " Reviews", fontSize: 14.0),
+                        text1(widget.reviewcount.toString() + " Reviews",
+                            fontSize: 14.0),
                       ],
                     ),
                   ),
@@ -536,7 +696,17 @@ class _DescriptionState extends State<Description> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => UserRating(),
+                        builder: (context) => UserRating(
+                          rating: widget.review,
+                          docid: widget.docid,
+                          rate1: widget.rate1,
+                          rate2: widget.rate2,
+                          rate3: widget.rate3,
+                          rate4: widget.rate4,
+                          rate5: widget.rate5,
+                          ratingcount: widget.ratingcount,
+                          reviewcount: widget.reviewcount,
+                        ),
                       ),
                     );
                   },
@@ -546,11 +716,25 @@ class _DescriptionState extends State<Description> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Divider(height: 3),
-            )
+            ),
+           // reviewscontainer
+            widget.reviewcount != 0
+                ? reviewscontainer
+                : Container(
+                    height: 200,
+                    child: Center(
+                        child: text1(
+                      "No reviews yet... :'(",
+                      fontSize: 30.0,
+                    ))),
             // reviews
           ],
         ),
       ),
+    );
+
+    var noreviews = Container(
+      color: Colors.red,
     );
 
     var bottombuttons = Container(

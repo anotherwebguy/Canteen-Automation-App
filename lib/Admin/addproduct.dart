@@ -260,8 +260,7 @@ class _AddProductState extends State<AddProduct> {
                             await uploadFileImage();
                             search(name.text);
                             Future.delayed(const Duration(seconds: 5), () {
-                              addFoodItemCategoryWise(selectedIndexCategory, name.text, description.text, price.text, path1,searchString,type);
-                              addFoodItemAllSection(name.text, description.text, price.text, path1,searchString,type);
+                              addFoodItemAllSection(name.text, description.text, price.text, path1,searchString,type, selectedIndexCategory);
                               setState(() {
                                 isLoading = false;
                               });

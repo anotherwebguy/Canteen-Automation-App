@@ -117,7 +117,8 @@ class _CategoriesState extends State<Categories> {
             children: [
               StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection(widget.category)
+                      .collection("All")
+                      .where("category", isEqualTo: widget.category)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
@@ -166,19 +167,35 @@ class _CategoriesState extends State<Categories> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => Description(
-                                                image: category.data()['image'],
-                                                name:
-                                                    category.data()['Itemname'],
-                                                description: category
-                                                    .data()['description'],
-                                                amount:
-                                                    category.data()['amount'],
-                                                category:
-                                                    category.data()['category'],
-                                                review:
-                                                    category.data()['rating'],
-                                                type:
-                                                    category.data()['type'])));
+                                                  image:
+                                                      category.data()['image'],
+                                                  name: category
+                                                      .data()['Itemname'],
+                                                  description: category
+                                                      .data()['description'],
+                                                  amount:
+                                                      category.data()['amount'],
+                                                  category: category
+                                                      .data()['category'],
+                                                  review:
+                                                      category.data()['rating'],
+                                                  type: category.data()['type'],
+                                                  docid: category.id,
+                                                  rate1:
+                                                      category.data()['rate1'],
+                                                  rate2:
+                                                      category.data()['rate2'],
+                                                  rate3:
+                                                      category.data()['rate3'],
+                                                  rate4:
+                                                      category.data()['rate4'],
+                                                  rate5:
+                                                      category.data()['rate5'],
+                                                  ratingcount: category
+                                                      .data()['ratingcount'],
+                                                  reviewcount: category
+                                                      .data()['reviewcount'],
+                                                )));
                                   },
                                   child: Container(
                                     margin: EdgeInsets.only(
@@ -189,8 +206,13 @@ class _CategoriesState extends State<Categories> {
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
                                         ClipRRect(
-                                          child: CachedNetworkImage(
-                                            imageUrl: category.data()['image'],
+                                          child: Hero(
+                                            tag:
+                                                "${category.data()['Itemname']}",
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  category.data()['image'],
+                                            ),
                                           ),
                                           borderRadius:
                                               BorderRadius.circular(4),

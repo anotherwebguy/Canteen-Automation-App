@@ -5,18 +5,50 @@ import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:flutter/material.dart';
 
 class Item extends StatelessWidget {
-  String name,image,price,description,category,type;
-  int rating;
-  Item({this.name,this.image,this.price,this.rating,this.description,this.category,this.type});
+  String name, image, price, description, category, type, docid;
+  num rating, ratingcount, reviewcount, rate1, rate2, rate3, rate4, rate5;
+  Item(
+      {this.name,
+      this.image,
+      this.price,
+      this.rating,
+      this.description,
+      this.category,
+      this.type,
+      this.docid,
+      this.rate1,
+      this.rate2,
+      this.rate3,
+      this.rate4,
+      this.rate5,
+      this.ratingcount,
+      this.reviewcount});
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Description(image: image,name: name,description: description,amount: price, category: category,review: rating,type: type)));
-
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Description(
+                      image: image,
+                      name: name,
+                      description: description,
+                      amount: price,
+                      category: category,
+                      review: rating,
+                      type: type,
+                      docid: docid,
+                      rate1: rate1,
+                      rate2: rate2,
+                      rate3: rate3,
+                      rate4: rate4,
+                      rate5: rate5,
+                      ratingcount: ratingcount,
+                      reviewcount: reviewcount,
+                    )));
       },
       child: Container(
         width: width * 0.4,
@@ -33,7 +65,7 @@ class Item extends StatelessWidget {
                 children: <Widget>[
                   Hero(
                     tag: "${name}",
-                                      child: CachedNetworkImage(
+                    child: CachedNetworkImage(
                         imageUrl: image,
                         height: width * 0.3,
                         width: width * 0.4,
@@ -55,8 +87,10 @@ class Item extends StatelessWidget {
                 children: <Widget>[
                   text1(name,
                       fontFamily: 'Medium', maxLine: 2, isCentered: false),
-                  SizedBox(height: 3,),
-                  text1("\$"+price.toString(),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  text1("\$" + price.toString(),
                       fontFamily: 'Medium', maxLine: 1, isCentered: false),
                   Row(
                     children: <Widget>[
@@ -65,8 +99,7 @@ class Item extends StatelessWidget {
                         minRating: 1,
                         itemSize: 16,
                         direction: Axis.horizontal,
-                        itemPadding:
-                        EdgeInsets.symmetric(horizontal: 1.0),
+                        itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
                         itemBuilder: (context, _) => Icon(
                           Icons.star,
                           color: Colors.amber,
@@ -75,9 +108,7 @@ class Item extends StatelessWidget {
                       ),
                     ],
                   ),
-                  text1("review",
-                      textColor: Color(0xFF949292),
-                      fontSize: 14.0),
+                  text1(reviewcount.toString()+" reviews", textColor: Color(0xFF949292), fontSize: 14.0),
                 ],
               ),
             )

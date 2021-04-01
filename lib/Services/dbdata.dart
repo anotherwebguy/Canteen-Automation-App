@@ -57,26 +57,26 @@ Future<void> fetchData() async {
   } catch (e) {}
 }
 
-Future<void> addFoodItemCategoryWise(String category, String name, String description, String amount, String path, List searchString, String type) async {
-  return await FirebaseFirestore.instance.collection(category).add({
-    'Itemname': name,
-    'description': description,
-    'amount': amount,
-    'image': path,
-    'category': category,
-    'rating': 0,
-    'searchString': searchString,
-    'type':type
-  });
-}
+// Future<void> addFoodItemCategoryWise(String category, String name, String description, String amount, String path, List searchString, String type) async {
+//   return await FirebaseFirestore.instance.collection(category).add({
+//     'Itemname': name,
+//     'description': description,
+//     'amount': amount,
+//     'image': path,
+//     'category': category,
+//     'rating': 0,
+//     'searchString': searchString,
+//     'type':type
+//   });
+// }
 
-Future<void> addFoodItemAllSection(String name, String description, String amount, String path, List searchString, String type) async {
+Future<void> addFoodItemAllSection(String name, String description, String amount, String path, List searchString, String type, String category) async {
   return await FirebaseFirestore.instance.collection("All").add({
     'Itemname': name,
     'description': description,
     'amount': amount,
     'image': path,
-    'category': "All",
+    'category': category,
     'rating': 0,
     'searchString': searchString,
     'type':type
@@ -90,5 +90,28 @@ Future<void> addFoodItemToCart(String name, String quantity, String amount, Stri
     'image': path,
     'quantity': quantity,
     'type': type,
+  });
+}
+
+Future<void> incrementReviewCount(String docid)async{
+  return await FirebaseFirestore.instance.collection("All").doc(docid).update({
+    "reviewcount": FieldValue.increment(1)
+  });
+}
+
+Future<void> incrementRatingCount(String docid)async{
+  return await FirebaseFirestore.instance.collection("All").doc(docid).update({
+    "ratingcount": FieldValue.increment(1)
+  });
+}
+
+Future<void> addReviews(String name,String review,int rating, String profileimg, String docid)async{
+
+  return await FirebaseFirestore.instance.collection("All").doc(docid).collection("reviews").add({
+    "name": name,
+    "review": review,
+    "rating": rating+1,
+    "image": profileimg,
+    "time": DateTime.now()
   });
 }

@@ -296,7 +296,8 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         StreamBuilder(
                             stream: FirebaseFirestore.instance
-                                .collection('FastFood')
+                                .collection('All')
+                                .where("category", isEqualTo: "FastFood")
                                 .limit(4)
                                 .snapshots(),
                             builder: (context, snapshot) {
@@ -344,23 +345,51 @@ class _HomeViewState extends State<HomeView> {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) => Description(
-                                                          image: fastfood
-                                                              .data()['image'],
-                                                          name: fastfood.data()[
-                                                              'Itemname'],
-                                                          description: fastfood
-                                                                  .data()[
-                                                              'description'],
-                                                          amount: fastfood
-                                                              .data()['amount'],
-                                                          category:
-                                                              fastfood.data()[
-                                                                  'category'],
-                                                          review: fastfood
-                                                              .data()['rating'],
-                                                          type: fastfood.data()[
-                                                              'type'])));
+                                                      builder: (context) =>
+                                                          Description(
+                                                            image:
+                                                                fastfood.data()[
+                                                                    'image'],
+                                                            name:
+                                                                fastfood.data()[
+                                                                    'Itemname'],
+                                                            description: fastfood
+                                                                    .data()[
+                                                                'description'],
+                                                            amount:
+                                                                fastfood.data()[
+                                                                    'amount'],
+                                                            category:
+                                                                fastfood.data()[
+                                                                    'category'],
+                                                            review:
+                                                                fastfood.data()[
+                                                                    'rating'],
+                                                            type: fastfood
+                                                                .data()['type'],
+                                                            docid: fastfood.id,
+                                                            rate1:
+                                                                fastfood.data()[
+                                                                    'rate1'],
+                                                            rate2:
+                                                                fastfood.data()[
+                                                                    'rate2'],
+                                                            rate3:
+                                                                fastfood.data()[
+                                                                    'rate3'],
+                                                            rate4:
+                                                                fastfood.data()[
+                                                                    'rate4'],
+                                                            rate5:
+                                                                fastfood.data()[
+                                                                    'rate5'],
+                                                            ratingcount: fastfood
+                                                                    .data()[
+                                                                'ratingcount'],
+                                                            reviewcount: fastfood
+                                                                    .data()[
+                                                                'reviewcount'],
+                                                          )));
                                             },
                                             child: Container(
                                               margin:
@@ -454,8 +483,9 @@ class _HomeViewState extends State<HomeView> {
                                                               width: 2,
                                                             ),
                                                             text(
-                                                                "7 " +
-                                                                    "reviews",
+                                                                fastfood.data()[
+                                                                    'reviewcount'].toString() +
+                                                                    " reviews",
                                                                 textColor: Color(
                                                                     0xFF9D9D9D),
                                                                 fontSize: 14.0),
@@ -523,7 +553,8 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         StreamBuilder(
                             stream: FirebaseFirestore.instance
-                                .collection('Drinks')
+                                .collection('All')
+                                .where("category", isEqualTo: "Drinks")
                                 .limit(4)
                                 .snapshots(),
                             builder: (context, snapshot) {
@@ -563,14 +594,25 @@ class _HomeViewState extends State<HomeView> {
                                             snapshot.data.docs[index];
                                         print(snapshot.data.docs[index].id);
                                         return Item(
-                                            name: drinks.data()['Itemname'],
-                                            image: drinks.data()['image'],
-                                            price: drinks.data()['amount'],
-                                            rating: drinks.data()['rating'],
-                                            description:
-                                                drinks.data()['description'],
-                                            category: drinks.data()['category'],
-                                            type: null);
+                                          name: drinks.data()['Itemname'],
+                                          image: drinks.data()['image'],
+                                          price: drinks.data()['amount'],
+                                          rating: drinks.data()['rating'],
+                                          description:
+                                              drinks.data()['description'],
+                                          category: drinks.data()['category'],
+                                          type: drinks.data()['type'],
+                                          docid: drinks.id,
+                                          rate1: drinks.data()['rate1'],
+                                          rate2: drinks.data()['rate2'],
+                                          rate3: drinks.data()['rate3'],
+                                          rate4: drinks.data()['rate4'],
+                                          rate5: drinks.data()['rate5'],
+                                          ratingcount:
+                                              drinks.data()['ratingcount'],
+                                          reviewcount:
+                                              drinks.data()['reviewcount'],
+                                        );
                                       },
                                     ),
                                   );
@@ -624,7 +666,8 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         StreamBuilder(
                             stream: FirebaseFirestore.instance
-                                .collection('Desserts')
+                                .collection('All')
+                                .where("category", isEqualTo: "Desserts")
                                 .limit(4)
                                 .snapshots(),
                             builder: (context, snapshot) {
@@ -664,14 +707,25 @@ class _HomeViewState extends State<HomeView> {
                                             snapshot.data.docs[index];
                                         print(snapshot.data.docs[index].id);
                                         return Item(
-                                            name: drinks.data()['Itemname'],
-                                            image: drinks.data()['image'],
-                                            price: drinks.data()['amount'],
-                                            rating: drinks.data()['rating'],
-                                            description:
-                                                drinks.data()['description'],
-                                            category: drinks.data()['category'],
-                                            type: null);
+                                          name: drinks.data()['Itemname'],
+                                          image: drinks.data()['image'],
+                                          price: drinks.data()['amount'],
+                                          rating: drinks.data()['rating'],
+                                          description:
+                                              drinks.data()['description'],
+                                          category: drinks.data()['category'],
+                                          type: drinks.data()['type'],
+                                          docid: drinks.id,
+                                          rate1: drinks.data()['rate1'],
+                                          rate2: drinks.data()['rate2'],
+                                          rate3: drinks.data()['rate3'],
+                                          rate4: drinks.data()['rate4'],
+                                          rate5: drinks.data()['rate5'],
+                                          ratingcount:
+                                              drinks.data()['ratingcount'],
+                                          reviewcount:
+                                              drinks.data()['reviewcount'],
+                                        );
                                       },
                                     ),
                                   );
@@ -763,9 +817,9 @@ class Filter extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context,
-              MaterialPageRoute(builder: (context) => model.tags));
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => model.tags));
       },
       child: Container(
         margin: EdgeInsets.only(left: 8, right: 8),

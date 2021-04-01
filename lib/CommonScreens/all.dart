@@ -162,15 +162,31 @@ class _AllCatState extends State<AllCat> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => Description(
-                                                image: all.data()['image'],
-                                                name: all.data()['Itemname'],
-                                                description:
-                                                    all.data()['description'],
-                                                amount: all.data()['amount'],
-                                                category:
-                                                    all.data()['category'],
-                                                review: all.data()['rating'],
-                                                type: all.data()['type'])));
+                                                  image: all.data()['image'],
+                                                  name: all.data()['Itemname'],
+                                                  description:
+                                                      all.data()['description'],
+                                                  amount: all.data()['amount'],
+                                                  category:
+                                                      all.data()['category'],
+                                                  review: all.data()['rating'],
+                                                  type: all.data()['type'],
+                                                  docid: all.id,
+                                                  rate1:
+                                                      all.data()['rate1'],
+                                                  rate2:
+                                                      all.data()['rate2'],
+                                                  rate3:
+                                                      all.data()['rate3'],
+                                                  rate4:
+                                                      all.data()['rate4'],
+                                                  rate5:
+                                                      all.data()['rate5'],
+                                                  ratingcount: all
+                                                      .data()['ratingcount'],
+                                                  reviewcount: all
+                                                      .data()['reviewcount'],
+                                                )));
                                   },
                                   child: Container(
                                     margin: EdgeInsets.only(
@@ -181,8 +197,11 @@ class _AllCatState extends State<AllCat> {
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
                                         ClipRRect(
-                                          child: CachedNetworkImage(
-                                            imageUrl: all.data()['image'],
+                                          child: Hero(
+                                            tag: "${all.data()['Itemname']}",
+                                            child: CachedNetworkImage(
+                                              imageUrl: all.data()['image'],
+                                            ),
                                           ),
                                           borderRadius:
                                               BorderRadius.circular(4),
