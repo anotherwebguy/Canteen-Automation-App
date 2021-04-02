@@ -1,8 +1,10 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:canteen_app/CommonScreens/homeView.dart';
 import 'package:canteen_app/Helpers/constants.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
+import 'package:canteen_app/Users/token.dart';
+import 'package:canteen_app/Users/userNotifications.dart';
 import 'package:canteen_app/Users/var.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,62 +25,136 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-  int amount;
-  String paymentStatus = "", paymentId="";
-  String docid ="";
+  int amount = 0, ordersize = 0;
+  String paymentStatus = "", paymentId = "";
+  String docid = "";
   var date = new DateFormat.yMd().format(new DateTime.now());
   var timeHour = TimeOfDay.now().hour;
   var timeMin = TimeOfDay.now().minute;
   var timePeriod = TimeOfDay.now().period.toString();
-  String timeset,period;
+  String timeset, period;
+  bool isLoading = false;
+  List<FoodItems> products;
 
   void setTime() {
-    if(timePeriod == "DayPeriod.am"){
-      if(timeHour == 0){
+    if (timePeriod == "DayPeriod.am") {
+      if (timeHour == 0) {
         timeHour = 12;
       }
       period = "AM";
-      if(timeMin < 10){
-        timeset = timeHour.toString() +":0" + timeMin.toString() +" " + period;
-      }else{
-        timeset = timeHour.toString() +":" + timeMin.toString() +" " + period;
+      if (timeMin < 10) {
+        timeset =
+            timeHour.toString() + ":0" + timeMin.toString() + " " + period;
+      } else {
+        timeset = timeHour.toString() + ":" + timeMin.toString() + " " + period;
       }
-
-    }else{
-      if(timeHour == 12){
+    } else {
+      if (timeHour == 12) {
         timeHour = 12;
-      }else{
+      } else {
         timeHour = timeHour - 12;
       }
 
       period = "PM";
-      if(timeMin < 10){
-        timeset = timeHour.toString() +":0" + timeMin.toString() +" " + period;
-      }else{
-        timeset = timeHour.toString() +":" + timeMin.toString() +" " + period;
+      if (timeMin < 10) {
+        timeset =
+            timeHour.toString() + ":0" + timeMin.toString() + " " + period;
+      } else {
+        timeset = timeHour.toString() + ":" + timeMin.toString() + " " + period;
       }
     }
   }
-  
+
+  Future<void> createOrders(String amountadd, String orderrange,
+      String displaytime, String status, String statusid) async {
+    return await FirebaseFirestore.instance.collection("Orders").add({
+      "Totalamount": amountadd,
+      "time": DateTime.now(),
+      "ordertime": orderrange,
+      "displaytime": displaytime,
+      "status": status,
+      "statusid": statusid,
+      "uid": FirebaseAuth.instance.currentUser.uid,
+    }).then((value) {
+      docid = value.id;
+    });
+  }
+
+  Future<void> loadDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          elevation: 10,
+          title: Text(
+              'Please wait while we place your order\nThis will take some time..'),
+          actions: <Widget>[
+            Center(
+              child: Container(
+                child: Theme(
+                  data: ThemeData.light(),
+                  child: CupertinoActivityIndicator(
+                    animating: true,
+                    radius: 20,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   //Razorpay payment
   Razorpay _razorpay = Razorpay();
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    Fluttertoast.showToast(
-        msg: "Payment successful", timeInSecForIosWeb: 4);
-    paymentId = response.paymentId;    
+    Fluttertoast.showToast(msg: "Payment successful", timeInSecForIosWeb: 4);
+    paymentId = response.paymentId;
     String msg = "Success";
     date = new DateFormat.yMd().format(new DateTime.now());
     timeHour = TimeOfDay.now().hour;
     timeMin = TimeOfDay.now().minute;
     timePeriod = TimeOfDay.now().period.toString();
     await setTime();
+    setState(() {
+      isLoading = true;
+    });
+    if (isLoading) {
+      loadDialog();
+    }
+    await createOrders(
+        amount.toString(), selectedIndexCategory, timeset, "Online", paymentId);
+    for (int i = 0; i < products.length; i++) {
+      addOrdersItems(products[i].name, products[i].quantity, products[i].image,
+          products[i].amount, docid);
+    }
+    Future.delayed(const Duration(seconds: 5), () async {
+      userNot(msg);
+      adminNotOrders();
+      adminNotPayment();
+      deleteCart();
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+        builder: (context) {
+          return HomeView();
+        },
+      ), (route) => false);
+    });
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
+  void _handlePaymentError(PaymentFailureResponse response) async {
     Fluttertoast.showToast(
         msg: "ERROR:" + response.code.toString() + " - " + response.message,
         timeInSecForIosWeb: 4);
+    userNot("Fail");
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -86,7 +162,14 @@ class _CartState extends State<Cart> {
         msg: "EXTERNAL_WALLET: " + response.walletName, timeInSecForIosWeb: 4);
   }
 
-  List<String> time =["10:00-11:00","11:00-12:00","12:00-1:00","1:00-2:00","2:00-3:00","3:00-4:00"];
+  List<String> time = [
+    "10:00-11:00",
+    "11:00-12:00",
+    "12:00-1:00",
+    "1:00-2:00",
+    "2:00-3:00",
+    "3:00-4:00"
+  ];
   String selectedIndexCategory;
 
   @override
@@ -96,13 +179,15 @@ class _CartState extends State<Cart> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
-    amount=0;
+    amount = 0;
+    ordersize = 0;
+    products = List<FoodItems>();
   }
 
   @override
-  void dispose(){
-  super.dispose();
-  _razorpay.clear();
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
   }
 
   void openCheckout(int amount) async {
@@ -231,56 +316,102 @@ class _CartState extends State<Cart> {
                                 children: [
                                   Card(
                                     elevation: 4,
-                                      child: DropdownButton(                             
+                                    child: DropdownButton(
                                       hint: Text("Select Time").paddingLeft(8),
                                       value: selectedIndexCategory,
                                       dropdownColor: Colors.white,
                                       style: boldTextStyle(),
                                       icon: Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: Colors.black,
+                                        Icons.keyboard_arrow_down,
+                                        color: Colors.black,
                                       ),
-                                       underline: 0.height,
-                                      items: time.map((value){
+                                      underline: 0.height,
+                                      items: time.map((value) {
                                         return new DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value, style: primaryTextStyle()).paddingLeft(8));
-                                      }).toList(), 
-                                      onChanged: (value){
+                                            value: value,
+                                            child: Text(value,
+                                                    style: primaryTextStyle())
+                                                .paddingLeft(8));
+                                      }).toList(),
+                                      onChanged: (value) {
                                         setState(() {
-                                          selectedIndexCategory=value;
+                                          selectedIndexCategory = value;
                                         });
                                       },
-                                      ),
+                                    ),
                                   )
                                 ],
                               ),
-                              
                             ],
                           ),
                           GestureDetector(
                             onTap: () async {
                               //openCheckout(40*100);
                               final popup = BeautifulPopup(
-                              context: context,
-                              template: TemplateGreenRocket,);
+                                context: context,
+                                template: TemplateGreenRocket,
+                              );
                               popup.show(
-                              title: "Payment Mode",
-                              content: MyStatefulWidget(), 
-                              actions: [
-                                popup.button(
-                                  label: "OK",
-                                  onPressed:()async {
-                                    if(method==PaymentMethod.payonline){
-                                      await openCheckout(amount*100);
-                                    }
-                                    else {
-                                      Fluttertoast.showToast(msg: "Payment done");
-                                    }
-                                    }
-                                ),
-                              ],
-                            );
+                                title: "Payment Mode",
+                                content: MyStatefulWidget(),
+                                actions: [
+                                  popup.button(
+                                      label: "OK",
+                                      onPressed: () async {
+                                        if (method == PaymentMethod.payonline) {
+                                          await openCheckout(amount * 100);
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg: "Payment done");
+                                          paymentId = docid;
+                                          String msg = "Success";
+                                          date = new DateFormat.yMd()
+                                              .format(new DateTime.now());
+                                          timeHour = TimeOfDay.now().hour;
+                                          timeMin = TimeOfDay.now().minute;
+                                          timePeriod =
+                                              TimeOfDay.now().period.toString();
+                                          await setTime();
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          if (isLoading) {
+                                            loadDialog();
+                                          }
+                                          await createOrders(
+                                              amount.toString(),
+                                              selectedIndexCategory,
+                                              timeset,
+                                              "Token",
+                                              paymentId);
+                                          for (int i = 0;
+                                              i < products.length;
+                                              i++) {
+                                            addOrdersItems(
+                                                products[i].name,
+                                                products[i].quantity,
+                                                products[i].image,
+                                                products[i].amount,
+                                                docid);
+                                          }
+                                          Future.delayed(
+                                              const Duration(seconds: 5),
+                                              () async {
+                                            adminNotOrders();
+                                            deleteCart();
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Token()));
+                                          });
+                                        }
+                                      }),
+                                ],
+                              );
                             },
                             child: Container(
                               padding:
@@ -386,7 +517,8 @@ class _CartState extends State<Cart> {
                   );
 
                 default:
-                  amount=0;
+                  amount = 0;
+                  ordersize = 0;
                   return ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -395,7 +527,21 @@ class _CartState extends State<Cart> {
                     itemBuilder: (context, index) {
                       DocumentSnapshot cartList = snapshot.data.docs[index];
                       print(snapshot.data.docs[index].id);
-                      amount+=int.parse(cartList.data()['amount']);
+                      amount += int.parse(cartList.data()['amount']);
+                      ordersize += 1;
+                      if (products.asMap()[index] != null) {
+                        products.removeAt(index);
+                      }
+                      products.insert(
+                          index,
+                          new FoodItems(
+                              cartList.data()['Itemname'],
+                              cartList.data()['image'],
+                              cartList.data()['amount'].toString(),
+                              cartList.data()['quantity'].toString(),
+                              cartList.data()['type']));
+                      print(products.length);
+                      print(products[0].amount+products[0].quantity);
                       return Slidable(
                         key: ValueKey(index),
                         actionPane: SlidableDrawerActionPane(),
@@ -436,17 +582,21 @@ class _CartState extends State<Cart> {
                                                 textColor: Colors.black),
                                             Row(
                                               children: [
-                                              cartList.data()['type']=="veg" || cartList.data()['type']==null?
-                                                Image.asset(
-                                                    "assets/food_c_type.png",
-                                                    color: Colors.green,
-                                                    width: 18,
-                                                    height: 18) :
-                                                    Image.asset(
-                                                    "assets/food_c_type.png",
-                                                    color: Colors.red,
-                                                    width: 18,
-                                                    height: 18),
+                                                cartList.data()['type'] ==
+                                                            "veg" ||
+                                                        cartList.data()[
+                                                                'type'] ==
+                                                            null
+                                                    ? Image.asset(
+                                                        "assets/food_c_type.png",
+                                                        color: Colors.green,
+                                                        width: 18,
+                                                        height: 18)
+                                                    : Image.asset(
+                                                        "assets/food_c_type.png",
+                                                        color: Colors.red,
+                                                        width: 18,
+                                                        height: 18),
                                                 text("   Amount: "),
                                                 text(
                                                     cartList
@@ -470,7 +620,8 @@ class _CartState extends State<Cart> {
                                         count: int.parse(
                                             cartList.data()['quantity']),
                                         id: cartList.id,
-                                        amount: int.parse(cartList.data()['amount'])),
+                                        amount: int.parse(
+                                            cartList.data()['amount'])),
                                     SizedBox(
                                       width: 8,
                                     ),
@@ -540,27 +691,6 @@ class _CartState extends State<Cart> {
         .delete();
   }
 
-  // String share() {
-  //   String val = "";
-  //   for (var i in products) {
-  //     val += i.title.toString() +
-  //         ": \t\t\t " +
-  //         i.quantity.toString() +
-  //         i.unit.toString() +
-  //         "\n";
-  //   }
-  //   return val;
-  // }
-
-  // void calcTotal(){
-  //   int total=0;
-  //   for(var i in products){
-  //     total+=i.quantity;
-  //   }
-  //   cartTotal=total.toString();
-  // }
-
-
   Future<void> deleteCart() async {
     FirebaseFirestore.instance
         .collection('admins')
@@ -576,9 +706,9 @@ class _CartState extends State<Cart> {
 }
 
 class Quantitybtn extends StatefulWidget {
-  final int count,amount;
+  final int count, amount;
   final String id;
-  Quantitybtn({this.count, this.id,this.amount});
+  Quantitybtn({this.count, this.id, this.amount});
 
   @override
   QuantitybtnState createState() => QuantitybtnState();
@@ -611,9 +741,9 @@ class QuantitybtnState extends State<Quantitybtn> {
         .collection('cart')
         .doc(widget.id)
         .update({
-          'quantity': count.toString(),
-          'amount': (((widget.amount/widget.count)*count).round()).toString()
-        });
+      'quantity': count.toString(),
+      'amount': (((widget.amount / widget.count) * count).round()).toString()
+    });
   }
 
   @override
@@ -719,20 +849,15 @@ class CustomAppBar extends StatelessWidget {
             },
           ),
         ),
-        //DragTargetWidget(bloc),
-        //Icon(Icons.delete_forever, color: Colors.red,size: 30,)
       ],
     );
   }
 }
 
-
-
 enum PaymentMethod { payonline, token }
 
 /// This is the stateful widget that the main application instantiates.
 class MyStatefulWidget extends StatefulWidget {
-
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
@@ -753,32 +878,48 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return Column(
       children: <Widget>[
         ListTile(
-          title: const Text('Pay Online', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),),
-          leading: Radio< PaymentMethod>(
+          title: const Text(
+            'Pay Online',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+          ),
+          leading: Radio<PaymentMethod>(
             value: PaymentMethod.payonline,
             groupValue: _character,
             onChanged: (PaymentMethod value) {
               setState(() {
                 _character = value;
-                method=_character;
+                method = _character;
               });
             },
           ),
         ),
         ListTile(
-          title: const Text('Token', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+          title: const Text('Token',
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
           leading: Radio<PaymentMethod>(
             value: PaymentMethod.token,
             groupValue: _character,
             onChanged: (PaymentMethod value) {
               setState(() {
                 _character = value;
-                method=_character;
+                method = _character;
               });
             },
           ),
         ),
       ],
     );
+  }
+}
+
+class FoodItems {
+  String name, image, amount, quantity, type;
+
+  FoodItems(name, image, amount, quantity, type) {
+    this.name = name;
+    this.image = image;
+    this.amount = amount;
+    this.quantity = quantity;
+    this.type = type;
   }
 }

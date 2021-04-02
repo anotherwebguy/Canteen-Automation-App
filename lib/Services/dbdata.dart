@@ -115,3 +115,79 @@ Future<void> addReviews(String name,String review,int rating, String profileimg,
     "time": DateTime.now()
   });
 }
+
+Future<void> addOrdersItems(String name,String quantity,String image, String amount, String docid)async{
+
+  return await FirebaseFirestore.instance.collection("Orders").doc(docid).collection("cart").add({
+    "name": name,
+    "quantity": quantity,
+    "image": image,
+    "amount": amount,
+  });
+}
+
+Future<void> adminNotPayment() async{
+  await FirebaseFirestore.instance
+      .collection('admins')
+      .snapshots().forEach((element) {
+    for (QueryDocumentSnapshot snapshot in element.docs) {
+      if(snapshot.data()['role']=="admin"){
+        snapshot.reference.collection('notifications').add({
+        'title':"Payment Received From "+name,
+        'body':"Payment Received Successfully",
+        'time':DateTime.now(),
+        'type':"payment",
+        'existence':true,
+        'uid':FirebaseAuth.instance.currentUser.uid
+      });
+      }      
+    }
+  });
+}
+
+Future<void> adminNotOrders() async{
+  await FirebaseFirestore.instance
+      .collection('admins')
+      .snapshots().forEach((element) {
+    for (QueryDocumentSnapshot snapshot in element.docs) {
+      if(snapshot.data()['role']=="admin"){
+        snapshot.reference.collection('notifications').add({
+        'title':"Order Received From "+name,
+        'body':"Have a look at this order!!",
+        'time':DateTime.now(),
+        'type':"orders",
+        'existence':true,
+        'uid':FirebaseAuth.instance.currentUser.uid
+      });
+      }      
+    }
+  });
+}
+
+  Future<void> userNot(String msg) async{
+    String title,body,status;
+    if(msg=="Success"){
+      title="Payment Successful";
+      body="Payment made successfully";
+      status="Success";    
+    } else{ 
+      title="Payment Failed";
+      body="Payment Failed!!!";
+      status="Fail";
+    }
+    await FirebaseFirestore.instance
+        .collection('admins')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection('notifications')
+        .add({
+      'title':title,
+      'body':body,
+      'existence':true,
+      'type':"Payment",
+      'time':DateTime.now(),
+      'status':status
+    });
+  }
+
+
+

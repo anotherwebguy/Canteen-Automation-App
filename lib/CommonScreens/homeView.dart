@@ -340,6 +340,7 @@ class _HomeViewState extends State<HomeView> {
                                           DocumentSnapshot fastfood =
                                               snapshot.data.docs[index];
                                           print(snapshot.data.docs[index].id);
+                                          String name = fastfood.data()['Itemname'];
                                           return GestureDetector(
                                             onTap: () {
                                               Navigator.push(
@@ -408,7 +409,7 @@ class _HomeViewState extends State<HomeView> {
                                                                   12.0),
                                                           child: Hero(
                                                             tag:
-                                                                "${fastfood.data()['Itemname']}",
+                                                                "${name}",
                                                             child:
                                                                 CachedNetworkImage(
                                                               imageUrl: fastfood
