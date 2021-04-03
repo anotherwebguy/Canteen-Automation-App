@@ -71,7 +71,7 @@ class _MyordersScreenState extends State<MyordersScreen> {
                             scrollDirection: Axis.vertical,
                             itemCount: snapshot.data.docs.length,
                             shrinkWrap: true,
-                            padding: EdgeInsets.only(bottom:10),
+                            //padding: EdgeInsets.only(bottom:10),
                             physics: ScrollPhysics(),
                             itemBuilder: (context, index) {
                               DocumentSnapshot orders = snapshot.data.docs[index];
