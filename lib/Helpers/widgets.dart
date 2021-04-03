@@ -340,3 +340,11 @@ class TopBarState extends State<TopBar> {
     );
   }
 }
+
+BoxDecoration boxDecoration5({double radius = spacing_middle, Color color = Colors.transparent, Color bgColor = Colors.white, var showShadow = false}) {
+  return BoxDecoration(
+      color: bgColor,
+      boxShadow: showShadow ? [BoxShadow(color:  Color(0X95E9EBF0), blurRadius: 10, spreadRadius: 2)] : [BoxShadow(color: Colors.transparent)],
+      border: Border.all(color: color),
+      borderRadius: BorderRadius.all(Radius.circular(radius)));
+}

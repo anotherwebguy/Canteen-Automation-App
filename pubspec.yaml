@@ -61,6 +61,8 @@ dependencies:
   flutter_staggered_animations: 0.1.2
   razorpay_flutter: ^1.2.0
   flutter_beautiful_popup: ^1.5.0
+  syncfusion_flutter_barcodes:
+  uuid:
 
 dev_dependencies:
   flutter_test:

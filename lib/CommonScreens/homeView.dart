@@ -188,7 +188,10 @@ class _HomeViewState extends State<HomeView> {
                                           ),
                                         ),
                                       )
-                                    : new Container()
+                                    : Positioned(
+                                       right: 11,
+                                        top: 11,
+                                      child: new Container())
                               ],
                             ),
                           ],

@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:flutter_beautiful_popup/main.dart';
+import 'package:uuid/uuid.dart';
 
 class Cart extends StatefulWidget {
   final int length;
@@ -35,6 +36,7 @@ class _CartState extends State<Cart> {
   String timeset, period;
   bool isLoading = false;
   List<FoodItems> products;
+  var uuid = Uuid();
 
   void setTime() {
     if (timePeriod == "DayPeriod.am") {
@@ -75,6 +77,9 @@ class _CartState extends State<Cart> {
       "status": status,
       "statusid": statusid,
       "uid": FirebaseAuth.instance.currentUser.uid,
+      "name": name,
+      "image": profileimg,
+      "phone": phn
     }).then((value) {
       docid = value.id;
     });
@@ -372,6 +377,8 @@ class _CartState extends State<Cart> {
                                           timePeriod =
                                               TimeOfDay.now().period.toString();
                                           await setTime();
+                                          String id=uuid.v1();
+                                          String tokenid=id.substring(0,16);
                                           setState(() {
                                             isLoading = true;
                                           });
@@ -383,7 +390,7 @@ class _CartState extends State<Cart> {
                                               selectedIndexCategory,
                                               timeset,
                                               "Token",
-                                              paymentId);
+                                              tokenid);
                                           for (int i = 0;
                                               i < products.length;
                                               i++) {
@@ -406,7 +413,7 @@ class _CartState extends State<Cart> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        Token()));
+                                                        Token(token: tokenid,)));
                                           });
                                         }
                                       }),

@@ -5,6 +5,7 @@ import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Services/signin.dart';
 import 'package:canteen_app/Users/cart.dart';
+import 'package:canteen_app/Users/myOrders.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -188,7 +189,7 @@ class _UserDrawerState extends State<UserDrawer> {
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
-                getDrawerItem(Icons.dinner_dining, "My Orders", 4),
+                getDrawerItem(Icons.dinner_dining, "My Orders", 4,tags: MyordersScreen()),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
