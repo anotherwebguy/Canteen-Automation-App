@@ -1,3 +1,4 @@
+import 'package:canteen_app/Admin/addproduct.dart';
 import 'package:canteen_app/Authentications/dashboard.dart';
 import 'package:canteen_app/CommonScreens/all.dart';
 import 'package:canteen_app/CommonScreens/homeView.dart';
@@ -157,17 +158,22 @@ class _AdminDrawerState extends State<AdminDrawer> {
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
-                getDrawerItem(Icons.food_bank_sharp, "All Categories", 3,tags: AllCat()),
+                getDrawerItem( Icons.article,"Add FoodItem", 3,tags: AddProduct()),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
-                getDrawerItem(Icons.notifications_active, "Notifications", 4,tags: Notifications()),
+                getDrawerItem(Icons.food_bank_sharp, "All Categories", 4,tags: AllCat()),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
-                getDrawerItem(Icons.logout, "Logout", 5,ind: "log"),
+                getDrawerItem(Icons.notifications_active, "Notifications", 5,tags: Notifications()),
+                Padding(
+                  padding: const EdgeInsets.only(left:15.0,right: 15.0),
+                  child: Divider(color: Color(0XFFDADADA), height: 1),
+                ),
+                getDrawerItem(Icons.logout, "Logout", 6,ind: "log"),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
