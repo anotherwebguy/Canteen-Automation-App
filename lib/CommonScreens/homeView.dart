@@ -6,6 +6,7 @@ import 'package:canteen_app/Authentications/dashboard.dart';
 import 'package:canteen_app/CommonScreens/all.dart';
 import 'package:canteen_app/CommonScreens/categories.dart';
 import 'package:canteen_app/CommonScreens/description.dart';
+import 'package:canteen_app/CommonScreens/notifications.dart';
 import 'package:canteen_app/CommonScreens/search.dart';
 import 'package:canteen_app/Helpers/Item.dart';
 import 'package:canteen_app/Helpers/collection.dart';
@@ -21,6 +22,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../Helpers/flutter_rating_bar.dart';
@@ -37,6 +39,61 @@ class _HomeViewState extends State<HomeView> {
   AuthService _auth = new AuthService();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int counter = 0;
+  int count = 0;
+
+  final FlutterLocalNotificationsPlugin notify =
+      new FlutterLocalNotificationsPlugin();
+
+  bool one = false;
+
+  Future<void> checkForNotification() async {
+    int channelCount = 0;
+    await FirebaseFirestore.instance
+        .collection('admins')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection('notifications')
+        .where('existence', isEqualTo: true)
+        .snapshots()
+        .listen((event) {
+      event.docChanges.forEach((element) {
+        if (element.type == DocumentChangeType.added &&
+            element.doc.data()['existence'] == true) {
+          _showNotification(element.doc.data()['title'],
+              element.doc.data()['body'], element.doc.id);
+          updateNotification(element.doc.id);
+          setState(() {
+            count++;
+          });
+        }
+      });
+    });
+  }
+
+  Future notificationSelected(String payload) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text("Notification : $payload"),
+      ),
+    );
+  }
+
+  Future _showNotification(
+      String title, String body, String channelCount) async {
+    var androidDetails = new AndroidNotificationDetails(
+        channelCount, "InstaFood", "This is my channel",
+        importance: Importance.max,
+        icon: "app_icon",
+        playSound: true,
+        enableVibration: true,
+        setAsGroupSummary: true,
+        enableLights: true);
+    var iSODetails = new IOSNotificationDetails();
+    var generalNotificationDetails =
+        new NotificationDetails(android: androidDetails, iOS: iSODetails);
+    await notify.show(0, title, body, generalNotificationDetails,
+        payload: title + "\n" + body);
+  }
 
   @override
   void initState() {
@@ -45,8 +102,17 @@ class _HomeViewState extends State<HomeView> {
     Listings1 = getFilterFavourites();
     dashlistings = addCollectionData();
     counter = 0;
+    count = 0;
     checkForCart();
+    var androidInitilize = new AndroidInitializationSettings('app_icon');
+    var iOSinitilize = new IOSInitializationSettings();
+    var initilizationsSettings = new InitializationSettings(
+        android: androidInitilize, iOS: iOSinitilize);
+    notify.initialize(initilizationsSettings,
+        onSelectNotification: notificationSelected);
+    checkForNotification();
   }
+
 
   Future<void> checkForCart() async {
     await FirebaseFirestore.instance
@@ -126,23 +192,56 @@ class _HomeViewState extends State<HomeView> {
                                         builder: (context) => Search()));
                               },
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.notifications_active,
-                                color: Colors.black,
-                                size: 25,
-                              ),
-                              onPressed: () async {
-                                await _auth.signOutGoogle();
-                                await _auth.signOut();
-                                await _auth.signOutFB();
-                                Navigator.pushAndRemoveUntil(context,
-                                    MaterialPageRoute(
-                                  builder: (context) {
-                                    return Dashboard();
+                            Stack(
+                              children: <Widget>[
+                                new IconButton(
+                                  icon: Icon(
+                                    Icons.notifications_active,
+                                    color: Colors.black,
+                                    size: 25,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      count = 0;
+                                    });
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Notifications(),
+                                      ),
+                                    );
                                   },
-                                ), (route) => false);
-                              },
+                                ),
+                                counter != 0
+                                    ? new Positioned(
+                                        right: 11,
+                                        top: 11,
+                                        child: new Container(
+                                          padding: EdgeInsets.all(2),
+                                          decoration: new BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                          constraints: BoxConstraints(
+                                            minWidth: 14,
+                                            minHeight: 14,
+                                          ),
+                                          child: Text(
+                                            '$count',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      )
+                                    : Positioned(
+                                        right: 11,
+                                        top: 11,
+                                        child: new Container())
+                              ],
                             ),
                             Stack(
                               children: <Widget>[
@@ -189,9 +288,9 @@ class _HomeViewState extends State<HomeView> {
                                         ),
                                       )
                                     : Positioned(
-                                       right: 11,
+                                        right: 11,
                                         top: 11,
-                                      child: new Container())
+                                        child: new Container())
                               ],
                             ),
                           ],
@@ -343,7 +442,8 @@ class _HomeViewState extends State<HomeView> {
                                           DocumentSnapshot fastfood =
                                               snapshot.data.docs[index];
                                           print(snapshot.data.docs[index].id);
-                                          String name = fastfood.data()['Itemname'];
+                                          String name =
+                                              fastfood.data()['Itemname'];
                                           return GestureDetector(
                                             onTap: () {
                                               Navigator.push(
@@ -411,8 +511,7 @@ class _HomeViewState extends State<HomeView> {
                                                                       .circular(
                                                                   12.0),
                                                           child: Hero(
-                                                            tag:
-                                                                "${name}",
+                                                            tag: "${name}",
                                                             child:
                                                                 CachedNetworkImage(
                                                               imageUrl: fastfood
@@ -487,8 +586,10 @@ class _HomeViewState extends State<HomeView> {
                                                               width: 2,
                                                             ),
                                                             text(
-                                                                fastfood.data()[
-                                                                    'reviewcount'].toString() +
+                                                                fastfood
+                                                                        .data()[
+                                                                            'reviewcount']
+                                                                        .toString() +
                                                                     " reviews",
                                                                 textColor: Color(
                                                                     0xFF9D9D9D),

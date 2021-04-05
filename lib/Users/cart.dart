@@ -4,7 +4,6 @@ import 'package:canteen_app/Helpers/constants.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Users/token.dart';
-import 'package:canteen_app/Users/userNotifications.dart';
 import 'package:canteen_app/Users/var.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
