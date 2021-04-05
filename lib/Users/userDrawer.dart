@@ -1,6 +1,7 @@
 import 'package:canteen_app/Authentications/dashboard.dart';
 import 'package:canteen_app/CommonScreens/all.dart';
 import 'package:canteen_app/CommonScreens/homeView.dart';
+import 'package:canteen_app/CommonScreens/notifications.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Services/signin.dart';
@@ -195,7 +196,7 @@ class _UserDrawerState extends State<UserDrawer> {
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
                 //getDrawerItem(Icons.history, "History", 4),
-                getDrawerItem(Icons.notifications_active, "Notifications", 5),
+                getDrawerItem(Icons.notifications_active, "Notifications", 5,tags: Notifications()),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),

@@ -4,6 +4,7 @@ import 'package:canteen_app/CommonScreens/search.dart';
 import 'package:canteen_app/Helpers/constants.dart';
 import 'package:canteen_app/Helpers/flutter_rating_bar.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
+import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Users/cart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,7 +59,7 @@ class _AllCatState extends State<AllCat> {
                   context, MaterialPageRoute(builder: (context) => Search()));
             },
           ),
-          Stack(
+          role == "user" ? Stack(
             children: <Widget>[
               new IconButton(
                 icon: Icon(
@@ -103,7 +104,7 @@ class _AllCatState extends State<AllCat> {
                     )
                   : new Container()
             ],
-          ),
+          ) : SizedBox(width: 0),
         ],
       ),
       body: Container(

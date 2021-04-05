@@ -243,7 +243,7 @@ class _HomeViewState extends State<HomeView> {
                                         child: new Container())
                               ],
                             ),
-                            Stack(
+                            role == "user" ? Stack(
                               children: <Widget>[
                                 new IconButton(
                                   icon: Icon(
@@ -292,7 +292,7 @@ class _HomeViewState extends State<HomeView> {
                                         top: 11,
                                         child: new Container())
                               ],
-                            ),
+                            ): SizedBox(width:0),
                           ],
                         ),
                       ],

@@ -368,7 +368,7 @@ class _DescriptionState extends State<Description> {
             SizedBox(
               height: spacing_standard_new,
             ),
-            Padding(
+            role == "user" ? Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -435,7 +435,7 @@ class _DescriptionState extends State<Description> {
                   ),
                 ],
               ),
-            ),
+            ) : Container(),
           ],
         ),
       ),
@@ -678,7 +678,7 @@ class _DescriptionState extends State<Description> {
                     textColor: Color(0xFF212121),
                     fontFamily: 'Medium',
                     fontSize: textSizeNormal),
-                MaterialButton(
+                role == "user" ? MaterialButton(
                   textColor: Color(0xFF3d87ff),
                   padding: EdgeInsets.only(
                       left: spacing_standard_new,
@@ -710,7 +710,7 @@ class _DescriptionState extends State<Description> {
                       ),
                     );
                   },
-                )
+                ) : Container(),
               ],
             ),
             Padding(
@@ -757,12 +757,12 @@ class _DescriptionState extends State<Description> {
                   children: <Widget>[
                     Row(
                       children: [
-                        text1("Tap to view details",
+                        text1("Edit the Food Item",
                             fontFamily: "Medium", fontSize: 16.0),
                       ],
                     ),
                     //text("View Bill Details", textColor: Color(0xFF3B8BEA)),
-                    GestureDetector(
+                    role == "user" ? GestureDetector(
                         onTap: () {
                           showModalBottomSheet<void>(
                             context: context,
@@ -872,10 +872,10 @@ class _DescriptionState extends State<Description> {
                               letterSpacing: 0.5,
                               height: 1.5,
                               decoration: TextDecoration.underline),
-                        ))
+                        )) : SizedBox(height: 0,),
                   ],
                 ),
-                GestureDetector(
+                role == "user" ? GestureDetector(
                   onTap: () async {
                     await addFoodItemToCart(
                         widget.name,
@@ -938,6 +938,37 @@ class _DescriptionState extends State<Description> {
                       ),
                     ),
                   ),
+                ) : GestureDetector(
+                  onTap: () async {
+                    
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
+                    decoration: gradientBoxDecoration(
+                        radius: 50,
+                        showShadow: true,
+                        gradientColor1: Color(0xFF3B8BEA),
+                        gradientColor2: Color(0xFF3F77DE)),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: "Edit",
+                              style: TextStyle(
+                                  fontFamily: "Medium",
+                                  fontSize: 16.0,
+                                  color: Color(0xFFffffff))),
+                          WidgetSpan(
+                            child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Icon(Icons.edit_outlined,
+                                    color: Color(0xFFffffff), size: 18)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -977,7 +1008,7 @@ class _DescriptionState extends State<Description> {
                       //   child: Icon(Icons.favorite_border,
                       //       color: Color(0xFF212121), size: 18),
                       // ),
-                      cartIcon(context, 3)
+                      role == "user" ? cartIcon(context, 3) : SizedBox(width:0),
                     ],
                     title: text(widget.name,
                         textColor: innerBoxIsScrolled == false
