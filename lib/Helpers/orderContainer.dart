@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/Helpers/constants.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
+import 'package:canteen_app/Services/dbdata.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderContainer extends StatefulWidget {
   final int index;
@@ -146,6 +148,7 @@ class _OrderContainerState extends State<OrderContainer> {
                   ),
                 ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
@@ -161,11 +164,19 @@ class _OrderContainerState extends State<OrderContainer> {
                       ],
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(Icons.phone),
-                        SizedBox(width: 5),
-                        text1(widget.phone, textColor: Colors.black38),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            role == "user" ? Icon(Icons.phone) : SizedBox(width:10),
+                            SizedBox(width: 5),
+                            text1(widget.phone, textColor: Colors.black38),
+                          ],
+                        ),
+                        role == "admin" ? IconButton(icon: Icon(Icons.phone), onPressed: ()async{
+                           await launch(
+                                                        "tel:${widget.phone}");
+                        }):SizedBox(width:0),
                       ],
                     )
                   ],
@@ -212,7 +223,7 @@ class _OrderContainerState extends State<OrderContainer> {
               ],
             ),
             SizedBox(height: 5),
-            GestureDetector(
+            role == "user" ? GestureDetector(
                 onTap: () {},
                 child: Column(
                   children: [
@@ -237,7 +248,7 @@ class _OrderContainerState extends State<OrderContainer> {
                         text1(widget.time.substring(0,16),textColor: Colors.black87)
                       ],)
                   ],
-                )),
+                )) : SizedBox(height:0),
             Visibility(
               visible: visibility,
               child: Container(

@@ -63,6 +63,7 @@ dependencies:
   flutter_beautiful_popup: ^1.5.0
   syncfusion_flutter_barcodes:
   uuid:
+  barcode_scan: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:canteen_app/Admin/editproduct.dart';
 import 'package:canteen_app/Helpers/extensions.dart';
 import 'package:canteen_app/Helpers/percent_indicator.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
@@ -368,74 +369,77 @@ class _DescriptionState extends State<Description> {
             SizedBox(
               height: spacing_standard_new,
             ),
-            role == "user" ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  text1("Quantity: ", fontSize: 20.0),
-                  Container(
-                    height: 40,
-                    alignment: Alignment.center,
-                    width: 100,
-                    //decoration: boxDecoration4(color: Colors.black, radius: 4.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
+            role == "user"
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
+                      children: [
+                        text1("Quantity: ", fontSize: 20.0),
                         Container(
-                          width: 35,
-                          height: 40,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF333333),
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(4.0),
-                                  topLeft: Radius.circular(4.0))),
-                          child: IconButton(
-                            icon: Icon(Icons.remove,
-                                color: Color(0xFFffffff), size: 10),
-                            onPressed: () {
-                              setState(() {
-                                if (cartcounter == 1 || cartcounter < 1) {
-                                  cartcounter = 1;
-                                } else {
-                                  cartcounter = cartcounter - 1;
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                        Text("$cartcounter"),
-                        Container(
-                          width: 35,
                           height: 40,
                           alignment: Alignment.center,
+                          width: 100,
+                          //decoration: boxDecoration4(color: Colors.black, radius: 4.0),
                           decoration: BoxDecoration(
-                              color: Color(0xFF333333),
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0))),
-                          child: IconButton(
-                            icon: Icon(Icons.add,
-                                color: Color(0xFFffffff), size: 10),
-                            onPressed: () {
-                              setState(() {
-                                cartcounter = cartcounter + 1;
-                                print(cartcounter);
-                              });
-                            },
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(4.0)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                width: 35,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF333333),
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(4.0),
+                                        topLeft: Radius.circular(4.0))),
+                                child: IconButton(
+                                  icon: Icon(Icons.remove,
+                                      color: Color(0xFFffffff), size: 10),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (cartcounter == 1 || cartcounter < 1) {
+                                        cartcounter = 1;
+                                      } else {
+                                        cartcounter = cartcounter - 1;
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                              Text("$cartcounter"),
+                              Container(
+                                width: 35,
+                                height: 40,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF333333),
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0))),
+                                child: IconButton(
+                                  icon: Icon(Icons.add,
+                                      color: Color(0xFFffffff), size: 10),
+                                  onPressed: () {
+                                    setState(() {
+                                      cartcounter = cartcounter + 1;
+                                      print(cartcounter);
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            ) : Container(),
+                  )
+                : Container(),
           ],
         ),
       ),
@@ -448,7 +452,8 @@ class _DescriptionState extends State<Description> {
             stream: FirebaseFirestore.instance
                 .collection('All')
                 .doc(widget.docid)
-                .collection("reviews").orderBy('time',descending: true)
+                .collection("reviews")
+                .orderBy('time', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -678,46 +683,50 @@ class _DescriptionState extends State<Description> {
                     textColor: Color(0xFF212121),
                     fontFamily: 'Medium',
                     fontSize: textSizeNormal),
-                role == "user" ? MaterialButton(
-                  textColor: Color(0xFF3d87ff),
-                  padding: EdgeInsets.only(
-                      left: spacing_standard_new,
-                      right: spacing_standard_new,
-                      top: 0,
-                      bottom: 0),
-                  child: text1("Rate Now",
-                      fontSize: textSizeMedium, textColor: Color(0xFF3d87ff)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(spacing_large),
-                    side: BorderSide(color: Color(0xFF3d87ff)),
-                  ),
-                  onPressed: () {
-                    //showRatingDialog(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UserRating(
-                          rating: widget.review,
-                          docid: widget.docid,
-                          rate1: widget.rate1,
-                          rate2: widget.rate2,
-                          rate3: widget.rate3,
-                          rate4: widget.rate4,
-                          rate5: widget.rate5,
-                          ratingcount: widget.ratingcount,
-                          reviewcount: widget.reviewcount,
+                role == "user"
+                    ? MaterialButton(
+                        textColor: Color(0xFF3d87ff),
+                        padding: EdgeInsets.only(
+                            left: spacing_standard_new,
+                            right: spacing_standard_new,
+                            top: 0,
+                            bottom: 0),
+                        child: text1("Rate Now",
+                            fontSize: textSizeMedium,
+                            textColor: Color(0xFF3d87ff)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              new BorderRadius.circular(spacing_large),
+                          side: BorderSide(color: Color(0xFF3d87ff)),
                         ),
-                      ),
-                    );
-                  },
-                ) : Container(),
+                        onPressed: () {
+                          //showRatingDialog(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UserRating(
+                                rating: widget.review,
+                                docid: widget.docid,
+                                rate1: widget.rate1,
+                                rate2: widget.rate2,
+                                rate3: widget.rate3,
+                                rate4: widget.rate4,
+                                rate5: widget.rate5,
+                                ratingcount: widget.ratingcount,
+                                reviewcount: widget.reviewcount,
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    : Container(),
               ],
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Divider(height: 3),
             ),
-           // reviewscontainer
+            // reviewscontainer
             widget.reviewcount != 0
                 ? reviewscontainer
                 : Container(
@@ -762,214 +771,236 @@ class _DescriptionState extends State<Description> {
                       ],
                     ),
                     //text("View Bill Details", textColor: Color(0xFF3B8BEA)),
-                    role == "user" ? GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet<void>(
-                            context: context,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            builder: (BuildContext context) {
-                              return Container(
-                                height: 200,
-                                // color: Colors.white,
-                                decoration: new BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: new BorderRadius.only(
-                                        topLeft: const Radius.circular(20.0),
-                                        topRight: const Radius.circular(20.0))),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              top: 20.0 / 4), //top padding 5
-                                          height: 4,
-                                          width: 60,
-                                          color: Colors.black,
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Row(
+                    role == "user"
+                        ? GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet<void>(
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    height: 200,
+                                    // color: Colors.white,
+                                    decoration: new BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: new BorderRadius.only(
+                                            topLeft:
+                                                const Radius.circular(20.0),
+                                            topRight:
+                                                const Radius.circular(20.0))),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      child: Center(
+                                        child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Column(
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  top:
+                                                      20.0 / 4), //top padding 5
+                                              height: 4,
+                                              width: 60,
+                                              color: Colors.black,
+                                            ),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: [
-                                                Text(
-                                                  "Items: ",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      "Items: ",
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontFamily: "Regular",
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    text1(widget.name,
+                                                        fontSize: 20.0),
+                                                  ],
                                                 ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                text1(widget.name,
-                                                    fontSize: 20.0),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      "Quantities: ",
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontFamily: "Regular",
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    text1(
+                                                        cartcounter.toString(),
+                                                        fontSize: 20.0),
+                                                  ],
+                                                )
                                               ],
                                             ),
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  "Quantities: ",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                text1(cartcounter.toString(),
-                                                    fontSize: 20.0),
-                                              ],
-                                            )
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            Text(
+                                              "Total price:                     " +
+                                                  (int.parse(widget.amount) *
+                                                          cartcounter)
+                                                      .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: "Regular",
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ],
                                         ),
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                        Text(
-                                          "Total price:                     " +
-                                              (int.parse(widget.amount) *
-                                                      cartcounter)
-                                                  .toString(),
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: "Regular",
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        child: Text(
-                          "View Details",
-                          style: TextStyle(
-                              color: Color(0xFF3B8BEA),
-                              fontSize: 18.0,
-                              fontFamily: "Regular",
-                              letterSpacing: 0.5,
-                              height: 1.5,
-                              decoration: TextDecoration.underline),
-                        )) : SizedBox(height: 0,),
+                            child: Text(
+                              "View Details",
+                              style: TextStyle(
+                                  color: Color(0xFF3B8BEA),
+                                  fontSize: 18.0,
+                                  fontFamily: "Regular",
+                                  letterSpacing: 0.5,
+                                  height: 1.5,
+                                  decoration: TextDecoration.underline),
+                            ))
+                        : SizedBox(
+                            height: 0,
+                          ),
                   ],
                 ),
-                role == "user" ? GestureDetector(
-                  onTap: () async {
-                    await addFoodItemToCart(
-                        widget.name,
-                        cartcounter.toString(),
-                        (int.parse(widget.amount) * cartcounter).toString(),
-                        widget.type,
-                        widget.image);
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        backgroundColor: Colors.white,
-                        title: Text("Confirmation",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold)),
-                        content: Text(
-                          "This Food Item has been added to your cart",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        actions: [
-                          FlatButton(
-                            child: Text(
-                              "Ok",
-                              style: TextStyle(
-                                color: Colors.blue,
+                role == "user"
+                    ? GestureDetector(
+                        onTap: () async {
+                          await addFoodItemToCart(
+                              widget.name,
+                              cartcounter.toString(),
+                              (int.parse(widget.amount) * cartcounter)
+                                  .toString(),
+                              widget.type,
+                              widget.image);
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              backgroundColor: Colors.white,
+                              title: Text("Confirmation",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
+                              content: Text(
+                                "This Food Item has been added to your cart",
+                                style: TextStyle(color: Colors.black),
                               ),
+                              actions: [
+                                FlatButton(
+                                  child: Text(
+                                    "Ok",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
                             ),
-                            onPressed: () async {
-                              Navigator.of(context).pop();
-                            },
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
+                          decoration: gradientBoxDecoration(
+                              radius: 50,
+                              showShadow: true,
+                              gradientColor1: Color(0xFF3B8BEA),
+                              gradientColor2: Color(0xFF3F77DE)),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: "Add to Cart",
+                                    style: TextStyle(
+                                        fontFamily: "Medium",
+                                        fontSize: 16.0,
+                                        color: Color(0xFFffffff))),
+                                WidgetSpan(
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Icon(Icons.add_shopping_cart,
+                                          color: Color(0xFFffffff), size: 18)),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
-                    decoration: gradientBoxDecoration(
-                        radius: 50,
-                        showShadow: true,
-                        gradientColor1: Color(0xFF3B8BEA),
-                        gradientColor2: Color(0xFF3F77DE)),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: "Add to Cart",
-                              style: TextStyle(
-                                  fontFamily: "Medium",
-                                  fontSize: 16.0,
-                                  color: Color(0xFFffffff))),
-                          WidgetSpan(
-                            child: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Icon(Icons.add_shopping_cart,
-                                    color: Color(0xFFffffff), size: 18)),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProduct(
+                                        name: widget.name,
+                                        description: widget.description,
+                                        price: widget.amount,
+                                        type: widget.type,
+                                        category: widget.category,
+                                        image: widget.image,
+                                        docid: widget.docid,
+                                      )));
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
+                          decoration: gradientBoxDecoration(
+                              radius: 50,
+                              showShadow: true,
+                              gradientColor1: Color(0xFF3B8BEA),
+                              gradientColor2: Color(0xFF3F77DE)),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: "Edit",
+                                    style: TextStyle(
+                                        fontFamily: "Medium",
+                                        fontSize: 16.0,
+                                        color: Color(0xFFffffff))),
+                                WidgetSpan(
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Icon(Icons.edit_outlined,
+                                          color: Color(0xFFffffff), size: 18)),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ) : GestureDetector(
-                  onTap: () async {
-                    
-                  },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
-                    decoration: gradientBoxDecoration(
-                        radius: 50,
-                        showShadow: true,
-                        gradientColor1: Color(0xFF3B8BEA),
-                        gradientColor2: Color(0xFF3F77DE)),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: "Edit",
-                              style: TextStyle(
-                                  fontFamily: "Medium",
-                                  fontSize: 16.0,
-                                  color: Color(0xFFffffff))),
-                          WidgetSpan(
-                            child: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Icon(Icons.edit_outlined,
-                                    color: Color(0xFFffffff), size: 18)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
+                        ),
+                      )
               ],
             ),
           ),
@@ -1008,7 +1039,9 @@ class _DescriptionState extends State<Description> {
                       //   child: Icon(Icons.favorite_border,
                       //       color: Color(0xFF212121), size: 18),
                       // ),
-                      role == "user" ? cartIcon(context, 3) : SizedBox(width:0),
+                      role == "user"
+                          ? cartIcon(context, 3)
+                          : SizedBox(width: 0),
                     ],
                     title: text(widget.name,
                         textColor: innerBoxIsScrolled == false

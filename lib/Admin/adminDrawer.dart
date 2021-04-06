@@ -1,4 +1,5 @@
 import 'package:canteen_app/Admin/addproduct.dart';
+import 'package:canteen_app/Admin/allOrders.dart';
 import 'package:canteen_app/Authentications/dashboard.dart';
 import 'package:canteen_app/CommonScreens/all.dart';
 import 'package:canteen_app/CommonScreens/homeView.dart';
@@ -153,7 +154,7 @@ class _AdminDrawerState extends State<AdminDrawer> {
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),
                 ),
-                getDrawerItem( Icons.article,"All Orders", 2,),
+                getDrawerItem( Icons.article,"All Orders", 2,tags: AllOrdersScreen()),
                 Padding(
                   padding: const EdgeInsets.only(left:15.0,right: 15.0),
                   child: Divider(color: Color(0XFFDADADA), height: 1),

@@ -86,6 +86,33 @@ Future<void> addFoodItemAllSection(
     'image': path,
     'category': category,
     'rating': 0,
+    'ratingcount': 0,
+    'reviewcount': 0,
+    'rate5': 0,
+    'rate4': 0,
+    'rate3': 0,
+    'rate2': 0,
+    'rate1': 0,
+    'searchString': searchString,
+    'type': type
+  });
+}
+
+Future<void> updateFoodItemAllSection(
+    String name,
+    String description,
+    String amount,
+    String path,
+    List searchString,
+    String type,
+    String category,
+    String docid) async {
+  return await FirebaseFirestore.instance.collection("All").doc(docid).update({
+    'Itemname': name,
+    'description': description,
+    'amount': amount,
+    'image': path,
+    'category': category,
     'searchString': searchString,
     'type': type
   });
