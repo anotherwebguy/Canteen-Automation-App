@@ -41,6 +41,7 @@ Future<void> addemailuser(String uid, String name, String email) async {
   });
 }
 
+
 Future<void> fetchData() async {
   try {
     await FirebaseFirestore.instance
@@ -57,19 +58,6 @@ Future<void> fetchData() async {
     });
   } catch (e) {}
 }
-
-// Future<void> addFoodItemCategoryWise(String category, String name, String description, String amount, String path, List searchString, String type) async {
-//   return await FirebaseFirestore.instance.collection(category).add({
-//     'Itemname': name,
-//     'description': description,
-//     'amount': amount,
-//     'image': path,
-//     'category': category,
-//     'rating': 0,
-//     'searchString': searchString,
-//     'type':type
-//   });
-// }
 
 Future<void> addFoodItemAllSection(
     String name,
@@ -189,6 +177,7 @@ Future<void> adminNotPayment() async {
           'time': DateTime.now(),
           'type': "payment",
           'existence': true,
+          'status':"success",
           'uid': FirebaseAuth.instance.currentUser.uid
         });
       }

@@ -128,7 +128,7 @@ class _OrderContainerState extends State<OrderContainer> {
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom:15.0),
+      margin: EdgeInsets.only(bottom: 15.0),
       decoration: boxDecoration5(
           showShadow: true, bgColor: Colors.white, radius: spacing_middle),
       child: Padding(
@@ -168,15 +168,20 @@ class _OrderContainerState extends State<OrderContainer> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            role == "user" ? Icon(Icons.phone) : SizedBox(width:10),
+                            role == "user"
+                                ? Icon(Icons.phone)
+                                : SizedBox(width: 10),
                             SizedBox(width: 5),
                             text1(widget.phone, textColor: Colors.black38),
                           ],
                         ),
-                        role == "admin" ? IconButton(icon: Icon(Icons.phone), onPressed: ()async{
-                           await launch(
-                                                        "tel:${widget.phone}");
-                        }):SizedBox(width:0),
+                        role == "admin"
+                            ? IconButton(
+                                icon: Icon(Icons.phone),
+                                onPressed: () async {
+                                  await launch("tel:${widget.phone}");
+                                })
+                            : SizedBox(width: 0),
                       ],
                     )
                   ],
@@ -223,32 +228,37 @@ class _OrderContainerState extends State<OrderContainer> {
               ],
             ),
             SizedBox(height: 5),
-            role == "user" ? GestureDetector(
-                onTap: () {},
-                child: Column(
-                  children: [
-                    Container(
-                      //width: 70,
-                      height: 55,
-                      //color: Colors.black26,
-                      child: SfBarcodeGenerator(
-                        value: widget.statusid,
-                        symbology: Code128(),
-                        //showValue: true,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            role == "user"
+                ? GestureDetector(
+                    onTap: () {},
+                    child: Column(
                       children: [
-                        text1("Tap to Scan Barcode", textColor: Colors.black38),
+                        Container(
+                          //width: 70,
+                          height: 55,
+                          //color: Colors.black26,
+                          child: SfBarcodeGenerator(
+                            value: widget.statusid,
+                            symbology: Code128(),
+                            //showValue: true,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            text1("Tap to Scan Barcode",
+                                textColor: Colors.black38),
+                          ],
+                        ),
                       ],
-                    ),
-                    Row(mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        text1(widget.time.substring(0,16),textColor: Colors.black87)
-                      ],)
-                  ],
-                )) : SizedBox(height:0),
+                    ))
+                : SizedBox(height: 0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                text1(widget.time.substring(0, 16), textColor: Colors.black87)
+              ],
+            ),
             Visibility(
               visible: visibility,
               child: Container(

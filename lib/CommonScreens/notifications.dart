@@ -101,7 +101,7 @@ class _NotificationsState extends State<Notifications> {
                       return Container(
                           //color: Colors.black,
                           margin: EdgeInsets.symmetric(
-                              horizontal: 6.0, vertical: 10.0),
+                              horizontal: 0.0, vertical: 10.0),
                           child: ListView.builder(
                               itemCount: snapshot.data.docs.length,
                               shrinkWrap: true,
@@ -163,103 +163,90 @@ class _NotificationsState extends State<Notifications> {
                                   },
                                   child: Container(
                                     // margin: EdgeInsets.only(left: 2),
-                                    child: ListTile(
-                                        leading: Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left:4.0,right: 4.0),
+                                      child: ListTile(
+                                          leading: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                              ),
+                                              height: 50,
+                                             // width: 50,
+                                              child: not.data()['type'] ==
+                                                      "Payment" ||  not.data()['type'] ==  "payment"
+                                                  ? not.data()['status'] == "Fail"
+                                                      ? Icon(
+                                                          Icons
+                                                              .error_outline_rounded,
+                                                          color: Colors.red,
+                                                        )
+                                                      : Icon(
+                                                          Icons
+                                                              .check_circle_outline_outlined,
+                                                          color: Colors.green,
+                                                        )
+                                                  : Icon(
+                                                      Icons.article,
+                                                      color: Colors.orange,
+                                                    )),
+                                          title: Text(
+                                            not.data()['title'],
+                                            style: boldTextStyle(),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          subtitle: Container(
+                                            margin: EdgeInsets.only(top: 4),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                         Text(
+                                                            not.data()['body'].substring(0,25)+"...",
+                                                            style: TextStyle(
+                                                              color: Colors
+                                                                  .grey[500],
+                                                              fontWeight:
+                                                                  FontWeight.bold,
+                                                              fontSize: 16,
+                                                            ),
+                                                            maxLines: 1,
+                                                          )
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      (tAgo.format(not
+                                                              .data()['time']
+                                                              .toDate()))
+                                                          .toString(),
+                                                      style: secondaryTextStyle(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
-                                            height: 50,
-                                            width: 50,
-                                            child: not.data()['type'] ==
-                                                    "Payment"
-                                                ? not.data()['status'] == "Fail"
-                                                    ? Icon(
-                                                        Icons
-                                                            .error_outline_rounded,
-                                                        color: Colors.red,
-                                                      )
-                                                    : Icon(
-                                                        Icons
-                                                            .check_circle_outline_outlined,
-                                                        color: Colors.green,
-                                                      )
-                                                : Icon(
-                                                    Icons.article,
-                                                    color: Colors.orange,
-                                                  )),
-                                        title: Text(
-                                          not.data()['title'],
-                                          style: boldTextStyle(),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        subtitle: Container(
-                                          margin: EdgeInsets.only(top: 4),
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  not.data()['body'].length <=
-                                                          30
-                                                      ? Text(
-                                                          not.data()['body'],
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .grey[500],
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 16,
-                                                          ),
-                                                        )
-                                                      : Text(
-                                                          not
-                                                                  .data()[
-                                                                      'body']
-                                                                  .substring(
-                                                                      0, 30) +
-                                                              "...",
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .grey[500],
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 16,
-                                                          ),
-                                                        )
-                                                ],
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Text(
-                                                    (tAgo.format(not
-                                                            .data()['time']
-                                                            .toDate()))
-                                                        .toString(),
-                                                    style: secondaryTextStyle(),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
                                           ),
-                                        ),
-                                        trailing: Container(
-                                          padding: EdgeInsets.only(right: 4),
-                                          child: CircleAvatar(
-                                            radius: int.parse((tAgo.format(not
-                                                            .data()['time']
-                                                            .toDate()))
-                                                        .toString()
-                                                        .substring(0, 1)) <=
-                                                    2
-                                                ? 4
-                                                : 0,
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        )),
+                                          trailing: Container(
+                                            padding: EdgeInsets.only(right: 4),
+                                            child: CircleAvatar(
+                                              radius: int.parse((tAgo.format(not
+                                                              .data()['time']
+                                                              .toDate()))
+                                                          .toString()
+                                                          .substring(0, 1)) <=
+                                                      2
+                                                  ? 4
+                                                  : 0,
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          )),
+                                    ),
                                   ),
                                 );
                               }));
