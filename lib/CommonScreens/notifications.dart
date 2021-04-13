@@ -204,7 +204,7 @@ class _NotificationsState extends State<Notifications> {
                                                       MainAxisAlignment.start,
                                                   children: [
                                                          Text(
-                                                            not.data()['body'].substring(0,25)+"...",
+                                                            not.data()['body'].substring(0,15)+"...",
                                                             style: TextStyle(
                                                               color: Colors
                                                                   .grey[500],
@@ -239,13 +239,14 @@ class _NotificationsState extends State<Notifications> {
                                                               .data()['time']
                                                               .toDate()))
                                                           .toString()
-                                                          .substring(0, 1)) <=
+                                                          .substring(0, 2)) <=
                                                       2
                                                   ? 4
                                                   : 0,
                                               backgroundColor: Colors.red,
                                             ),
-                                          )),
+                                          )
+                                          ),
                                     ),
                                   ),
                                 );

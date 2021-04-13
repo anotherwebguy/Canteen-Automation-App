@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_beautiful_popup/main.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class AllOrdersScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   @override
   void initState() {
     super.initState();
-    barcode="";
+    barcode = "";
   }
 
   init() async {}
@@ -106,21 +107,43 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                               DocumentSnapshot orders =
                                   snapshot.data.docs[index];
                               print(snapshot.data.docs[index].id);
-                              return OrderContainer(
-                                index: index,
-                                name: orders.data()['name'],
-                                image: orders.data()['image'],
-                                phone: orders.data()['phone'],
-                                totalamount: orders.data()['Totalamount'],
-                                status: orders.data()['status'],
-                                statusid: orders.data()['statusid'],
-                                ordertime: orders.data()['ordertime'],
-                                time: DateTime.parse(orders
-                                        .data()['time']
-                                        .toDate()
-                                        .toString())
-                                    .toString(),
-                                docid: orders.id,
+                              return InkWell(
+                                onTap: () {
+                                  final popup = BeautifulPopup(
+                                    context: context,
+                                    template: TemplateGreenRocket,
+                                  );
+                                  popup.show(
+                                    title: "Order Delivered?",
+                                    content: Center(
+                                      child: Container(
+                                        child: Text("Note: Only proceed if you have delivered the food to the owner"),),
+                                    ),
+                                    actions: [
+                                      popup.button(
+                                          label: "Delivered?",
+                                          onPressed: () async {
+                                            
+                                          }),
+                                    ],
+                                  );
+                                },
+                                child: OrderContainer(
+                                  index: index,
+                                  name: orders.data()['name'],
+                                  image: orders.data()['image'],
+                                  phone: orders.data()['phone'],
+                                  totalamount: orders.data()['Totalamount'],
+                                  status: orders.data()['status'],
+                                  statusid: orders.data()['statusid'],
+                                  ordertime: orders.data()['ordertime'],
+                                  time: DateTime.parse(orders
+                                          .data()['time']
+                                          .toDate()
+                                          .toString())
+                                      .toString(),
+                                  docid: orders.id,
+                                ),
                               );
                             }),
                       );

@@ -5,6 +5,7 @@ import 'package:canteen_app/Services/dbdata.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_beautiful_popup/main.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -230,7 +231,28 @@ class _OrderContainerState extends State<OrderContainer> {
             SizedBox(height: 5),
             role == "user"
                 ? GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      final popup = BeautifulPopup(
+                        context: context,
+                        template: TemplateGreenRocket,
+                      );
+                      popup.show(
+                        title: "Scan Barcode.",
+                        content: Center(
+                          child: Container(
+                            height: 55,
+                            child: SfBarcodeGenerator(
+                                  value: widget.statusid,
+                                  symbology: Code128(),
+                                ),
+                          ),
+                        ),
+                        // actions: [
+                        //   popup.button(
+                        //       label: "Delivered?", onPressed: () async {}),
+                        // ],
+                      );
+                    },
                     child: Column(
                       children: [
                         Container(
@@ -246,7 +268,7 @@ class _OrderContainerState extends State<OrderContainer> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            text1("Tap to Scan Barcode",
+                            text1("Tap to Scan the Barcode",
                                 textColor: Colors.black38),
                           ],
                         ),

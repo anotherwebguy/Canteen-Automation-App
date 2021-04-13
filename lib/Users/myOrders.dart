@@ -34,13 +34,14 @@ class _MyordersScreenState extends State<MyordersScreen> {
       width: context.width(),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-              child: Column(
+        child: Column(
           children: [
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("Orders")
-                    .where("uid",
-                        isEqualTo: FirebaseAuth.instance.currentUser.uid)
+                    .orderBy('time', descending: true)
+                    // .where("uid",
+                    //     isEqualTo: FirebaseAuth.instance.currentUser.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
@@ -74,22 +75,28 @@ class _MyordersScreenState extends State<MyordersScreen> {
                             //padding: EdgeInsets.only(bottom:10),
                             physics: ScrollPhysics(),
                             itemBuilder: (context, index) {
-                              DocumentSnapshot orders = snapshot.data.docs[index];
+                              DocumentSnapshot orders =
+                                  snapshot.data.docs[index];
                               print(snapshot.data.docs[index].id);
-                              return OrderContainer(
-                                index: index,
-                                name: orders.data()['name'],
-                                image: orders.data()['image'],
-                                phone: orders.data()['phone'],
-                                totalamount: orders.data()['Totalamount'],
-                                status: orders.data()['status'],
-                                statusid: orders.data()['statusid'],
-                                ordertime: orders.data()['ordertime'],
-                                time: DateTime.parse(
-                                        orders.data()['time'].toDate().toString())
-                                    .toString(),
-                                docid: orders.id,
-                              );
+                              if (orders.data()['uid'] ==
+                                  FirebaseAuth.instance.currentUser.uid) {
+                                return OrderContainer(
+                                  index: index,
+                                  name: orders.data()['name'],
+                                  image: orders.data()['image'],
+                                  phone: orders.data()['phone'],
+                                  totalamount: orders.data()['Totalamount'],
+                                  status: orders.data()['status'],
+                                  statusid: orders.data()['statusid'],
+                                  ordertime: orders.data()['ordertime'],
+                                  time: DateTime.parse(orders
+                                          .data()['time']
+                                          .toDate()
+                                          .toString())
+                                      .toString(),
+                                  docid: orders.id,
+                                );
+                              }
                             }),
                       );
                   }

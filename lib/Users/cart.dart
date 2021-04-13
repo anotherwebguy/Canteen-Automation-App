@@ -376,8 +376,8 @@ class _CartState extends State<Cart> {
                                           timePeriod =
                                               TimeOfDay.now().period.toString();
                                           await setTime();
-                                          String id=uuid.v1();
-                                          String tokenid=id.substring(0,16);
+                                          String id = uuid.v1();
+                                          String tokenid = id.substring(0, 16);
                                           setState(() {
                                             isLoading = true;
                                           });
@@ -408,11 +408,42 @@ class _CartState extends State<Cart> {
                                             setState(() {
                                               isLoading = false;
                                             });
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Token(token: tokenid,)));
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                backgroundColor: Colors.white,
+                                                titlePadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 30,
+                                                        vertical: 16),
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 30,
+                                                        vertical: 16),
+                                                title: Text("Order Booked",
+                                                    style: boldTextStyle(
+                                                        size: 20)),
+                                                content: Text(
+                                                    "OrderId: " + tokenid,
+                                                    style: primaryTextStyle()),
+                                                actions: [
+                                                  RaisedButton(
+                                                    color: Colors.blue,
+                                                    onPressed: () {
+                                                      Navigator
+                                                          .pushAndRemoveUntil(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                        builder: (context) {
+                                                          return HomeView();
+                                                        },
+                                                      ), (route) => false);
+                                                    },
+                                                    child: Text("Ok"),
+                                                  )
+                                                ],
+                                              ),
+                                            );
                                           });
                                         }
                                       }),
@@ -547,7 +578,7 @@ class _CartState extends State<Cart> {
                               cartList.data()['quantity'].toString(),
                               cartList.data()['type']));
                       print(products.length);
-                      print(products[0].amount+products[0].quantity);
+                      print(products[0].amount + products[0].quantity);
                       return Slidable(
                         key: ValueKey(index),
                         actionPane: SlidableDrawerActionPane(),
