@@ -240,3 +240,19 @@ Future<void> updateNotification(String id) async {
     'existence': false,
   });
 }
+
+Future<void> adminNotDelivery(String uid,String docid) async {
+  await FirebaseFirestore.instance
+      .collection('admins')
+      .doc(uid)
+      .collection('notifications')
+      .add({
+    'title': "Order Delivered",
+    'body': "Please sign for confirmation",
+    'existence': true,
+    'type': "Payment",
+    'time': DateTime.now(),
+    'status': "Sign",
+    'docid': docid
+  });
+}

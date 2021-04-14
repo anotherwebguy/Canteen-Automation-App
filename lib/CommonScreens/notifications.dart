@@ -1,8 +1,10 @@
+import 'package:canteen_app/Users/signature.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:signature/signature.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 import 'package:canteen_app/Users/myOrders.dart';
 
@@ -112,7 +114,40 @@ class _NotificationsState extends State<Notifications> {
                                     snapshot.data.docs[index];
                                 return GestureDetector(
                                   onTap: () {
-                                    if (not.data()['status'] != "Fail") {
+                                    if (not.data()['status'] == "Sign") {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          titlePadding: EdgeInsets.symmetric(
+                                              horizontal: 30, vertical: 16),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 30, vertical: 16),
+                                          title: Text(not.data()['title'],
+                                              style: boldTextStyle(size: 20)),
+                                          content: Text(not.data()['body'],
+                                              style: primaryTextStyle()),
+                                          actions: [
+                                            RaisedButton(
+                                              color: Colors.blue,
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => Sign(
+                                                        docid:
+                                                            not.data()['docid'],
+                                                        notid: not
+                                                            .id), //PersonalDetails(),
+                                                  ),
+                                                );
+                                              },
+                                              child: Text("Sign"),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    } else if (not.data()['status'] != "Fail") {
                                       showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(
@@ -164,17 +199,21 @@ class _NotificationsState extends State<Notifications> {
                                   child: Container(
                                     // margin: EdgeInsets.only(left: 2),
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left:4.0,right: 4.0),
+                                      padding: const EdgeInsets.only(
+                                          left: 4.0, right: 4.0),
                                       child: ListTile(
                                           leading: Container(
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                               ),
                                               height: 50,
-                                             // width: 50,
+                                              // width: 50,
                                               child: not.data()['type'] ==
-                                                      "Payment" ||  not.data()['type'] ==  "payment"
-                                                  ? not.data()['status'] == "Fail"
+                                                          "Payment" ||
+                                                      not.data()['type'] ==
+                                                          "payment"
+                                                  ? not.data()['status'] ==
+                                                          "Fail"
                                                       ? Icon(
                                                           Icons
                                                               .error_outline_rounded,
@@ -203,17 +242,20 @@ class _NotificationsState extends State<Notifications> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: [
-                                                         Text(
-                                                            not.data()['body'].substring(0,15)+"...",
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[500],
-                                                              fontWeight:
-                                                                  FontWeight.bold,
-                                                              fontSize: 16,
-                                                            ),
-                                                            maxLines: 1,
-                                                          )
+                                                    Text(
+                                                      not
+                                                              .data()['body']
+                                                              .substring(
+                                                                  0, 15) +
+                                                          "...",
+                                                      style: TextStyle(
+                                                        color: Colors.grey[500],
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
+                                                      maxLines: 1,
+                                                    )
                                                   ],
                                                 ),
                                                 Row(
@@ -225,7 +267,8 @@ class _NotificationsState extends State<Notifications> {
                                                               .data()['time']
                                                               .toDate()))
                                                           .toString(),
-                                                      style: secondaryTextStyle(),
+                                                      style:
+                                                          secondaryTextStyle(),
                                                     ),
                                                   ],
                                                 ),
@@ -245,8 +288,7 @@ class _NotificationsState extends State<Notifications> {
                                                   : 0,
                                               backgroundColor: Colors.red,
                                             ),
-                                          )
-                                          ),
+                                          )),
                                     ),
                                   ),
                                 );

@@ -48,25 +48,31 @@ class _HomeViewState extends State<HomeView> {
 
   Future<void> checkForNotification() async {
     int channelCount = 0;
-    await FirebaseFirestore.instance
-        .collection('admins')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .collection('notifications')
-        .where('existence', isEqualTo: true)
-        .snapshots()
-        .listen((event) {
-      event.docChanges.forEach((element) {
-        if (element.type == DocumentChangeType.added &&
-            element.doc.data()['existence'] == true) {
-          _showNotification(element.doc.data()['title'],
-              element.doc.data()['body'], element.doc.id);
-          updateNotification(element.doc.id);
-          setState(() {
-            count++;
-          });
-        }
+    try {
+      await FirebaseFirestore.instance
+          .collection('admins')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection('notifications')
+          .where('existence', isEqualTo: true)
+          .snapshots()
+          .listen((event) {
+        event.docChanges.forEach((element) {
+          if (element.type == DocumentChangeType.added &&
+              element.doc.data()['existence'] == true) {
+            _showNotification(element.doc.data()['title'],
+                element.doc.data()['body'], element.doc.id);
+            updateNotification(element.doc.id);
+            setState(() {
+              count++;
+            });
+            print(count);
+            print(element.doc.id);
+          }
+        });
       });
-    });
+    } catch (e) {
+      print("error");
+    }
   }
 
   Future notificationSelected(String payload) async {
@@ -80,14 +86,17 @@ class _HomeViewState extends State<HomeView> {
 
   Future _showNotification(
       String title, String body, String channelCount) async {
+    var bigPicture = BigPictureStyleInformation(
+        DrawableResourceAndroidBitmap("app_icon"),
+        largeIcon: DrawableResourceAndroidBitmap("app_icon"),
+        contentTitle: title,
+        summaryText: body,
+        htmlFormatContent: true,
+        htmlFormatContentTitle: true);
     var androidDetails = new AndroidNotificationDetails(
         channelCount, "InstaFood", "This is my channel",
-        importance: Importance.max,
-        icon: "app_icon",
-        playSound: true,
-        enableVibration: true,
-        setAsGroupSummary: true,
-        enableLights: true);
+        importance: Importance.max, styleInformation: bigPicture);
+
     var iSODetails = new IOSNotificationDetails();
     var generalNotificationDetails =
         new NotificationDetails(android: androidDetails, iOS: iSODetails);
@@ -99,20 +108,23 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Listings1 = getFilterFavourites();
-    dashlistings = addCollectionData();
-    counter = 0;
-    count = 0;
-    checkForCart();
-    var androidInitilize = new AndroidInitializationSettings('app_icon');
-    var iOSinitilize = new IOSInitializationSettings();
-    var initilizationsSettings = new InitializationSettings(
-        android: androidInitilize, iOS: iOSinitilize);
-    notify.initialize(initilizationsSettings,
-        onSelectNotification: notificationSelected);
-    checkForNotification();
+    try {
+      Listings1 = getFilterFavourites();
+      dashlistings = addCollectionData();
+      counter = 0;
+      count = 0;
+      checkForCart();
+      var androidInitilize = new AndroidInitializationSettings('app_icon');
+      var iOSinitilize = new IOSInitializationSettings();
+      var initilizationsSettings = new InitializationSettings(
+          android: androidInitilize, iOS: iOSinitilize);
+      notify.initialize(initilizationsSettings,
+          onSelectNotification: notificationSelected);
+      checkForNotification();
+    } catch (e) {
+      print("error");
+    }
   }
-
 
   Future<void> checkForCart() async {
     await FirebaseFirestore.instance
@@ -212,7 +224,7 @@ class _HomeViewState extends State<HomeView> {
                                     );
                                   },
                                 ),
-                                counter != 0
+                                count != 0
                                     ? new Positioned(
                                         right: 11,
                                         top: 11,
@@ -243,56 +255,58 @@ class _HomeViewState extends State<HomeView> {
                                         child: new Container())
                               ],
                             ),
-                            role == "user" ? Stack(
-                              children: <Widget>[
-                                new IconButton(
-                                  icon: Icon(
-                                    Icons.shopping_cart,
-                                    color: Colors.black,
-                                    size: 25,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Cart(
-                                          length: counter,
+                            role == "user"
+                                ? Stack(
+                                    children: <Widget>[
+                                      new IconButton(
+                                        icon: Icon(
+                                          Icons.shopping_cart,
+                                          color: Colors.black,
+                                          size: 25,
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                counter != 0
-                                    ? new Positioned(
-                                        right: 11,
-                                        top: 11,
-                                        child: new Container(
-                                          padding: EdgeInsets.all(2),
-                                          decoration: new BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          constraints: BoxConstraints(
-                                            minWidth: 14,
-                                            minHeight: 14,
-                                          ),
-                                          child: Text(
-                                            '$counter',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 8,
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Cart(
+                                                length: counter,
+                                              ),
                                             ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      )
-                                    : Positioned(
-                                        right: 11,
-                                        top: 11,
-                                        child: new Container())
-                              ],
-                            ): SizedBox(width:0),
+                                          );
+                                        },
+                                      ),
+                                      counter != 0
+                                          ? new Positioned(
+                                              right: 11,
+                                              top: 11,
+                                              child: new Container(
+                                                padding: EdgeInsets.all(2),
+                                                decoration: new BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                constraints: BoxConstraints(
+                                                  minWidth: 14,
+                                                  minHeight: 14,
+                                                ),
+                                                child: Text(
+                                                  '$counter',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 8,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            )
+                                          : Positioned(
+                                              right: 11,
+                                              top: 11,
+                                              child: new Container())
+                                    ],
+                                  )
+                                : SizedBox(width: 0),
                           ],
                         ),
                       ],

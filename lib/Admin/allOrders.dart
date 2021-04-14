@@ -17,6 +17,8 @@ class AllOrdersScreen extends StatefulWidget {
 class _AllOrdersScreenState extends State<AllOrdersScreen> {
   int selectedindex;
   String barcode = "";
+  bool isLoading = false;
+  String docid;
 
   @override
   void initState() {
@@ -35,6 +37,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
     try {
       var barcode = await BarcodeScanner.scan();
       setState(() => this.barcode = barcode.toString());
+      print(barcode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
@@ -49,6 +52,62 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
     } catch (e) {
       setState(() => this.barcode = '');
     }
+  }
+
+  Future<void> loadDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          elevation: 10,
+          title: Text('Please wait while we save the info..'),
+          actions: <Widget>[
+            Center(
+              child: Container(
+                child: Theme(
+                  data: ThemeData.light(),
+                  child: CupertinoActivityIndicator(
+                    animating: true,
+                    radius: 20,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> addtoHistory(
+      String name,
+      String photo,
+      String amount,
+      String phone,
+      String status,
+      String statusid,
+      String time,
+      String uid) async {
+    await FirebaseFirestore.instance.collection('History').add({
+      'name': name,
+      'photo': photo,
+      'amount': amount,
+      'phone': phone,
+      'status': status,
+      'statusid': statusid,
+      'ordertime': time,
+      'uid': uid,
+      'time': DateTime.now(),
+    }).then((value) {
+      docid = value.id;
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   @override
@@ -117,13 +176,43 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                     title: "Order Delivered?",
                                     content: Center(
                                       child: Container(
-                                        child: Text("Note: Only proceed if you have delivered the food to the owner"),),
+                                        child: Text(
+                                            "Note: Only proceed if you have delivered the food to the owner"),
+                                      ),
                                     ),
                                     actions: [
                                       popup.button(
                                           label: "Delivered?",
                                           onPressed: () async {
-                                            
+                                            Navigator.pop(context);
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            if (isLoading) {
+                                              loadDialog();
+                                            }
+                                            await addtoHistory(
+                                                orders.data()['name'],
+                                                orders.data()['image'],
+                                                orders.data()['Totalamount'],
+                                                orders.data()['phone'],
+                                                orders.data()['status'],
+                                                orders.data()['statusid'],
+                                                orders.data()['ordertime'],
+                                                orders.data()['uid']);
+                                            Future.delayed(
+                                                const Duration(seconds: 5),
+                                                () async {
+                                              setState(() {
+                                                isLoading = false;
+                                              });
+                                              adminNotDelivery(
+                                                  orders.data()['uid'], docid);
+                                              await FirebaseFirestore.instance
+                                                  .collection('Orders')
+                                                  .doc(orders.id)
+                                                  .delete();
+                                            });
                                           }),
                                     ],
                                   );
