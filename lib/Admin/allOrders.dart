@@ -1,4 +1,5 @@
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:canteen_app/Helpers/adminhistory.dart';
 import 'package:canteen_app/Helpers/orderContainer.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -246,21 +247,73 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
     var history = Container(
       color: Color(0xFFf2f2f1),
       padding: EdgeInsets.all(16),
-      alignment: Alignment.center,
       width: context.width(),
-      child: Column(
-        children: [
-          Text(
-            'Home',
-            style: TextStyle(color: Colors.black, fontSize: 24),
-          ),
-          15.height,
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [],
-          )
-        ],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("History")
+                    .orderBy('time', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('We got an Error ${snapshot.error}');
+                  }
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: Container(
+                          child: Theme(
+                            data: ThemeData.light(),
+                            child: CupertinoActivityIndicator(
+                              animating: true,
+                              radius: 20,
+                            ),
+                          ),
+                        ),
+                      );
+
+                    case ConnectionState.none:
+                      return Text('oops no data');
+
+                    case ConnectionState.done:
+                      return Text('We are Done');
+                    default:
+                      return Container(
+                        child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: snapshot.data.docs.length,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot history =
+                                  snapshot.data.docs[index];
+                              print(snapshot.data.docs[index].id);
+                              if ( history.data()['sign'] != null) {
+                                return AdminHistory(
+                                    index: index,
+                                    name: history.data()['name'],
+                                    image: history.data()['photo'],
+                                    sign: history.data()['sign'],
+                                    phone: history.data()['phone'],
+                                    totalamount: history.data()['amount'],
+                                    status: history.data()['status'],
+                                    statusid: history.data()['statusid'],
+                                    ordertime: history.data()['ordertime'],
+                                    time: DateTime.parse(history
+                                            .data()['time']
+                                            .toDate()
+                                            .toString())
+                                        .toString());
+                              }
+                            }),
+                      );
+                  }
+                }),
+          ],
+        ),
       ),
     );
 
