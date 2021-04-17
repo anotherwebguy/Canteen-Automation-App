@@ -40,8 +40,6 @@ class _MyordersScreenState extends State<MyordersScreen> {
                 stream: FirebaseFirestore.instance
                     .collection("Orders")
                     .orderBy('time', descending: true)
-                    // .where("uid",
-                    //     isEqualTo: FirebaseAuth.instance.currentUser.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
