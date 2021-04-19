@@ -1,3 +1,5 @@
+# 🍕Insta🍕 <br> 🍦Food🍦 <br> Canteen Automation App
+
 <p align= "center"><img width=70% src="https://github.com/anotherwebguy/Canteen-Automation-App/blob/master/assets/app.png"></p>
  
 <div align="center">
