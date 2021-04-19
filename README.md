@@ -1,4 +1,4 @@
-# 🍕Insta🍕 <br> 🍦Food🍦 <br> Canteen Automation App
+<h1 align="center"> 🍕Insta🍕 <br> 🍦Food🍦 <br> Canteen Automation App </h1>
 
 <p align= "center"><img width=70% src="https://github.com/anotherwebguy/Canteen-Automation-App/blob/master/assets/app.png"></p>
  
