@@ -95,6 +95,19 @@ Distributed under the GPL-3.0 License. See [LICENSE](https://github.com/anotherw
 
 
 
+## Contributors:
+<table>
+	<tr>
+		<td>
+			<a href="https://github.com/anotherwebguy/Canteen-Automation-App/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=anotherwebguy/Canteen-Automation-App" />
+</a>
+		</td>
+	</tr>
+</table>
+
+
+
 
 
 
