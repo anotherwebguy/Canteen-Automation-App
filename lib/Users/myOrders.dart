@@ -39,6 +39,8 @@ class _MyordersScreenState extends State<MyordersScreen> {
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("Orders")
+                    .where("uid",
+                        isEqualTo: FirebaseAuth.instance.currentUser.uid)
                     .orderBy('time', descending: true)
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -76,25 +78,22 @@ class _MyordersScreenState extends State<MyordersScreen> {
                               DocumentSnapshot orders =
                                   snapshot.data.docs[index];
                               print(snapshot.data.docs[index].id);
-                              if (orders.data()['uid'] ==
-                                  FirebaseAuth.instance.currentUser.uid) {
-                                return OrderContainer(
-                                  index: index,
-                                  name: orders.data()['name'],
-                                  image: orders.data()['image'],
-                                  phone: orders.data()['phone'],
-                                  totalamount: orders.data()['Totalamount'],
-                                  status: orders.data()['status'],
-                                  statusid: orders.data()['statusid'],
-                                  ordertime: orders.data()['ordertime'],
-                                  time: DateTime.parse(orders
-                                          .data()['time']
-                                          .toDate()
-                                          .toString())
-                                      .toString(),
-                                  docid: orders.id,
-                                );
-                              }
+                              return OrderContainer(
+                                index: index,
+                                name: orders.data()['name'],
+                                image: orders.data()['image'],
+                                phone: orders.data()['phone'],
+                                totalamount: orders.data()['Totalamount'],
+                                status: orders.data()['status'],
+                                statusid: orders.data()['statusid'],
+                                ordertime: orders.data()['ordertime'],
+                                time: DateTime.parse(orders
+                                        .data()['time']
+                                        .toDate()
+                                        .toString())
+                                    .toString(),
+                                docid: orders.id,
+                              );
                             }),
                       );
                   }
@@ -116,8 +115,8 @@ class _MyordersScreenState extends State<MyordersScreen> {
                 stream: FirebaseFirestore.instance
                     .collection("History")
                     .orderBy('time', descending: true)
-                    // .where("uid",
-                    //     isEqualTo: FirebaseAuth.instance.currentUser.uid)
+                    .where("uid",
+                        isEqualTo: FirebaseAuth.instance.currentUser.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
@@ -154,9 +153,7 @@ class _MyordersScreenState extends State<MyordersScreen> {
                               DocumentSnapshot history =
                                   snapshot.data.docs[index];
                               print(snapshot.data.docs[index].id);
-                              if (history.data()['uid'] ==
-                                  FirebaseAuth.instance.currentUser.uid && history.data()['sign']!=null) {
-                                return UserHistory(
+                              return UserHistory(
                                   index: index,
                                   name: history.data()['name'],
                                   image: history.data()['sign'],
@@ -169,9 +166,7 @@ class _MyordersScreenState extends State<MyordersScreen> {
                                           .data()['time']
                                           .toDate()
                                           .toString())
-                                      .toString()
-                                );
-                              }
+                                      .toString());
                             }),
                       );
                   }

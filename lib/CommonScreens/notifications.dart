@@ -1,3 +1,5 @@
+import 'package:canteen_app/Admin/allOrders.dart';
+import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Users/signature.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -164,13 +166,23 @@ class _NotificationsState extends State<Notifications> {
                                             RaisedButton(
                                               color: Colors.blue,
                                               onPressed: () {
-                                                Navigator.push(
+                                                if (role == "user") {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          MyordersScreen(), //PersonalDetails(),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        MyordersScreen(), //PersonalDetails(),
+                                                        AllOrdersScreen(), //PersonalDetails(),
                                                   ),
                                                 );
+                                                }
                                               },
                                               child: Text("Check"),
                                             )

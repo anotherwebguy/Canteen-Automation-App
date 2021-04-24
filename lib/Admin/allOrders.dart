@@ -103,6 +103,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
       'ordertime': time,
       'uid': uid,
       'time': DateTime.now(),
+      'sign': "https://static.thenounproject.com/png/504708-200.png"
     }).then((value) {
       docid = value.id;
       setState(() {
@@ -213,6 +214,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                                   .collection('Orders')
                                                   .doc(orders.id)
                                                   .delete();
+                                              
                                             });
                                           }),
                                     ],
@@ -291,23 +293,22 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                               DocumentSnapshot history =
                                   snapshot.data.docs[index];
                               print(snapshot.data.docs[index].id);
-                              if ( history.data()['sign'] != null) {
-                                return AdminHistory(
-                                    index: index,
-                                    name: history.data()['name'],
-                                    image: history.data()['photo'],
-                                    sign: history.data()['sign'],
-                                    phone: history.data()['phone'],
-                                    totalamount: history.data()['amount'],
-                                    status: history.data()['status'],
-                                    statusid: history.data()['statusid'],
-                                    ordertime: history.data()['ordertime'],
-                                    time: DateTime.parse(history
-                                            .data()['time']
-                                            .toDate()
-                                            .toString())
-                                        .toString());
-                              }
+                              print(snapshot.data.docs.length);
+                              return AdminHistory(
+                                  index: index,
+                                  name: history.data()['name'],
+                                  image: history.data()['photo'],
+                                  sign: history.data()['sign'],
+                                  phone: history.data()['phone'],
+                                  totalamount: history.data()['amount'],
+                                  status: history.data()['status'],
+                                  statusid: history.data()['statusid'],
+                                  ordertime: history.data()['ordertime'],
+                                  time: DateTime.parse(history
+                                          .data()['time']
+                                          .toDate()
+                                          .toString())
+                                      .toString());
                             }),
                       );
                   }

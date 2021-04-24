@@ -64,7 +64,6 @@ class _AdminHistoryState extends State<AdminHistory> {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: text(widget.name,
-                              fontFamily: "Bold",
                               fontSize: 15.0,
                               textColor: Colors.black),
                         ),
