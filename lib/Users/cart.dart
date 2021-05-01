@@ -729,12 +729,10 @@ class _CartState extends State<Cart> {
   }
 
   Future<void> deleteCart() async {
-    FirebaseFirestore.instance
+   FirebaseFirestore.instance
         .collection('admins')
         .doc(FirebaseAuth.instance.currentUser.uid)
-        .collection('cart')
-        .snapshots()
-        .forEach((element) {
+        .collection('cart').snapshots().forEach((element) {
       for (QueryDocumentSnapshot snapshot in element.docs) {
         snapshot.reference.delete();
       }

@@ -34,6 +34,28 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
     if (mounted) super.setState(fn);
   }
 
+  void loadingSnackBarAndMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            message,
+            style: const TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          const CircularProgressIndicator(),
+        ],
+      ),
+      duration: const Duration(seconds: 7),
+    ));
+  }
+
+  void hideSnackBar() {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  }
+
   Future barcodeScanning() async {
     try {
       var barcode = await BarcodeScanner.scan();
@@ -170,30 +192,26 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                               print(snapshot.data.docs[index].id);
                               return InkWell(
                                 onTap: () {
-                                  final popup = BeautifulPopup(
+                                  showDialog(
                                     context: context,
-                                    template: TemplateGreenRocket,
-                                  );
-                                  popup.show(
-                                    title: "Order Delivered?",
-                                    content: Center(
-                                      child: Container(
-                                        child: Text(
-                                            "Note: Only proceed if you have delivered the food to the owner"),
-                                      ),
-                                    ),
-                                    actions: [
-                                      popup.button(
-                                          label: "Delivered?",
+                                    builder: (context) => AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      titlePadding: EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 16),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 16),
+                                      title: Text("Order Delivered?",
+                                          style: boldTextStyle(size: 20)),
+                                      content: Text(
+                                          "Note: Only proceed if you have delivered the food to the owner",
+                                          style: primaryTextStyle()),
+                                      actions: [
+                                        RaisedButton(
+                                          color: Colors.blue,
                                           onPressed: () async {
                                             Navigator.pop(context);
-                                            setState(() {
-                                              isLoading = true;
-                                            });
-                                            if (isLoading) {
-                                              loadDialog();
-                                            }
-                                            await addtoHistory(
+                                            loadingSnackBarAndMessage('Confirming Order...');
+                                            addtoHistory(
                                                 orders.data()['name'],
                                                 orders.data()['image'],
                                                 orders.data()['Totalamount'],
@@ -202,22 +220,19 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                                 orders.data()['statusid'],
                                                 orders.data()['ordertime'],
                                                 orders.data()['uid']);
-                                            Future.delayed(
-                                                const Duration(seconds: 5),
-                                                () async {
-                                              setState(() {
-                                                isLoading = false;
-                                              });
                                               adminNotDelivery(
                                                   orders.data()['uid'], docid);
                                               await FirebaseFirestore.instance
                                                   .collection('Orders')
                                                   .doc(orders.id)
                                                   .delete();
+                                              hideSnackBar();
                                               
-                                            });
-                                          }),
-                                    ],
+                                          },
+                                          child: Text("Proceed.."),
+                                        )
+                                      ],
+                                    ),
                                   );
                                 },
                                 child: OrderContainer(
