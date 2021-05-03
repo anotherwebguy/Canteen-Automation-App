@@ -287,20 +287,7 @@ class _NotificationsState extends State<Notifications> {
                                               ],
                                             ),
                                           ),
-                                          trailing: Container(
-                                            padding: EdgeInsets.only(right: 4),
-                                            child: CircleAvatar(
-                                              radius: int.parse((tAgo.format(not
-                                                              .data()['time']
-                                                              .toDate()))
-                                                          .toString()
-                                                          .substring(0, 2)) <=
-                                                      2
-                                                  ? 4
-                                                  : 0,
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          )),
+                                          ),
                                     ),
                                   ),
                                 );

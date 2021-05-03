@@ -211,7 +211,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                           onPressed: () async {
                                             Navigator.pop(context);
                                             loadingSnackBarAndMessage('Confirming Order...');
-                                            addtoHistory(
+                                            await addtoHistory(
                                                 orders.data()['name'],
                                                 orders.data()['image'],
                                                 orders.data()['Totalamount'],
