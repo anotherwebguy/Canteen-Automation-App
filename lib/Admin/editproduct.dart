@@ -124,7 +124,7 @@ class _EditProductState extends State<EditProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context, "Add Products"),
+      appBar: appBar(context, "Edit Products"),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[

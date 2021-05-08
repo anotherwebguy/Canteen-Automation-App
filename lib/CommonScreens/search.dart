@@ -95,7 +95,8 @@ class _SearchState extends State<Search> {
                       ? FirebaseFirestore.instance.collection("All").snapshots()
                       : FirebaseFirestore.instance
                           .collection("All")
-                          .where('searchString', arrayContains: Searchstring.toLowerCase())
+                          .where('searchString',
+                              arrayContains: Searchstring.toLowerCase())
                           .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
@@ -145,15 +146,31 @@ class _SearchState extends State<Search> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => Description(
-                                                image: all.data()['image'],
-                                                name: all.data()['Itemname'],
-                                                description:
-                                                    all.data()['description'],
-                                                amount: all.data()['amount'],
-                                                category:
-                                                    all.data()['category'],
-                                                review: all.data()['rating'],
-                                                type: all.data()['type'])));
+                                                  image: all.data()['image'],
+                                                  name: all.data()['Itemname'],
+                                                  description:
+                                                      all.data()['description'],
+                                                  amount: all.data()['amount'],
+                                                  category:
+                                                      all.data()['category'],
+                                                  review: all.data()['rating'],
+                                                  type: all.data()['type'],
+                                                  docid: all.id,
+                                                  rate1:
+                                                      all.data()['rate1'],
+                                                  rate2:
+                                                      all.data()['rate2'],
+                                                  rate3:
+                                                      all.data()['rate3'],
+                                                  rate4:
+                                                      all.data()['rate4'],
+                                                  rate5:
+                                                      all.data()['rate5'],
+                                                  ratingcount: all
+                                                      .data()['ratingcount'],
+                                                  reviewcount: all
+                                                      .data()['reviewcount'],
+                                                )));
                                   },
                                   child: Container(
                                     margin: EdgeInsets.only(

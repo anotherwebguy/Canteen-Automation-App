@@ -159,7 +159,7 @@ class _OrderContainerState extends State<OrderContainer> {
                           scrollDirection: Axis.horizontal,
                           child: text(widget.name,
                               fontFamily: "Bold",
-                              fontSize: 15.0,
+                              fontSize: 13.0,
                               textColor: Colors.black),
                         ),
                       ],
