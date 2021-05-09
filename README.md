@@ -15,7 +15,7 @@
   <p align="center">
   <img src="https://img.shields.io/badge/dart-%230175C2.svg?&style=for-the-badge&logo=dart&logoColor=white"/> <img src="https://img.shields.io/badge/Flutter%20-%2302569B.svg?&style=for-the-badge&logo=Flutter&logoColor=white" /> <img src="https://img.shields.io/badge/Firebase-orange" width=80/> <img src="https://dashboard.razorpay.com/img/logo_full.png" width=80 height=30/>  <img src="https://img.shields.io/badge/github%20-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/>
 
-<h2 align= "left"><b>Contributing Guidelines</b></h2>
+<h2 align= "left"><b>Contributing Guidelines!</b></h2>
 
 1. Make sure to keep the UI consistent while adding a new feature.
 2. When adding new packages, use the package version which is compatible with the new flutter 2 update.
