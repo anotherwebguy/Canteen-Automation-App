@@ -90,7 +90,7 @@ class Item extends StatelessWidget {
                   SizedBox(
                     height: 3,
                   ),
-                  text1("\$" + price.toString(),
+                  text1("\u{20B9}" + price.toString(),
                       fontFamily: 'Medium', maxLine: 1, isCentered: false),
                   Row(
                     children: <Widget>[

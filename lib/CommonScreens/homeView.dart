@@ -611,7 +611,7 @@ class _HomeViewState extends State<HomeView> {
                                                           ],
                                                         ),
                                                         text1(
-                                                            "\$" +
+                                                            "\u{20B9}" +
                                                                 fastfood.data()[
                                                                     'amount'],
                                                             textColor: Color(
