@@ -640,7 +640,7 @@ class _CartState extends State<Cart> {
                                                             .data()['amount']
                                                             .toString() +
                                                         " " +
-                                                        "Rs",
+                                                        "\u{20B9}",
                                                     textColor: Colors.green),
                                               ],
                                             ),

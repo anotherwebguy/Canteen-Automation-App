@@ -182,7 +182,7 @@ class _DescriptionState extends State<Description> {
                   fontFamily: 'Medium',
                   fontSize: 22.0),
               text1(
-                "Rs " + widget.amount + "  ",
+                "\u{20B9}" + widget.amount + "  ",
                 textColor: Colors.green,
                 fontSize: 22.0,
                 fontFamily: 'Medium',
