@@ -934,7 +934,7 @@ class _DescriptionState extends State<Description> {
                             ),
                           );
                         },
-                        child: Container(
+                        child: widget.inv=="instock"?Container(
                           padding: EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
                           decoration: gradientBoxDecoration(
                               radius: 50,
@@ -960,7 +960,7 @@ class _DescriptionState extends State<Description> {
                               ],
                             ),
                           ),
-                        ),
+                        ):Container(),
                 ): GestureDetector(
                         onTap: () async {
                           Navigator.push(
