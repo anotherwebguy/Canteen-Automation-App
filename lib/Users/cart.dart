@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/CommonScreens/homeView.dart';
 import 'package:canteen_app/Helpers/constants.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
+import 'package:canteen_app/Model/order.dart';
+import 'package:canteen_app/Model/recieptorder.dart';
 import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Users/token.dart';
 import 'package:canteen_app/Users/var.dart';
@@ -399,6 +401,7 @@ class _CartState extends State<Cart> {
                                                 products[i].image,
                                                 products[i].amount,
                                                 docid);
+                                                
                                           }
                                           Future.delayed(
                                               const Duration(seconds: 5),
@@ -480,7 +483,10 @@ class _CartState extends State<Cart> {
                                 ),
                               ),
                             ),
-                          )
+                            onLongPress:() {
+                              print(list);
+                            }                        
+                            )
                         ],
                       ),
                     ),
@@ -565,6 +571,7 @@ class _CartState extends State<Cart> {
                       DocumentSnapshot cartList = snapshot.data.docs[index];
                       print(snapshot.data.docs[index].id);
                       amount += int.parse(cartList.data()['amount']);
+                      
                       ordersize += 1;
                       if (products.asMap()[index] != null) {
                         products.removeAt(index);

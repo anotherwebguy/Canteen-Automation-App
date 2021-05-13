@@ -2,7 +2,6 @@
 import 'package:canteen_app/Authentications/dashboard.dart';
 import 'package:canteen_app/Authentications/mobile.dart';
 import 'package:canteen_app/Services/dbdata.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +46,6 @@ class MyApp extends StatelessWidget {
           ? HomeView()
           :FirebaseAuth.instance.currentUser != null && phn==null ? Mobile() : Dashboard(),
       debugShowCheckedModeBanner: false,
-    );
+      );
   }
 }
