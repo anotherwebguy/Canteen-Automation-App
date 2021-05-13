@@ -484,7 +484,7 @@ class _CartState extends State<Cart> {
                             )
                         ],
                       ),
-                                      )                  ],
+                      )   ],
                 ),
               ),
             );
