@@ -405,11 +405,7 @@ class _CartState extends State<Cart> {
                                                 products[i].image,
                                                 products[i].amount,
                                                 docid);
-                                                list[i]=Order(
-                                                  item: products[i].name,
-                                                  quantity: products[i].quantity,
-                                                  price: products[i].amount
-                                                );
+                                                
                                           }
                                           Future.delayed(
                                               const Duration(seconds: 5),
@@ -491,10 +487,7 @@ class _CartState extends State<Cart> {
                                   ],
                                 ),
                               ),
-                            ),
-                            onLongPress:() {
-                              print(list);
-                            }                        
+                            ),    
                             )
                         ],
                       ),
