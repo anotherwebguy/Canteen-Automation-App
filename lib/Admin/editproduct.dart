@@ -13,12 +13,13 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart' as Path;
 
 class EditProduct extends StatefulWidget {
-  final String name, description, price, type, category, image, docid;
+  final String name, description, price, type, category, image,inv,docid;
   EditProduct(
       {this.name,
       this.description,
       this.price,
       this.type,
+      this.inv,
       this.category,
       this.image,
       this.docid});
@@ -52,6 +53,7 @@ class _EditProductState extends State<EditProduct> {
     selectedIndexCategory = widget.category;
     type = widget.type;
     path1 = widget.image;
+    inv = widget.inv;
   }
 
   Future<void> chooseFile() async {

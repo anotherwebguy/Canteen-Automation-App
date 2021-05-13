@@ -972,6 +972,7 @@ class _DescriptionState extends State<Description> {
                                         description: widget.description,
                                         price: widget.amount,
                                         type: widget.type,
+                                        inv: widget.inv,
                                         category: widget.category,
                                         image: widget.image,
                                         docid: widget.docid,
