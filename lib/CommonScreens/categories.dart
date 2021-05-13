@@ -181,6 +181,7 @@ class _CategoriesState extends State<Categories> {
                                                   review:
                                                       category.data()['rating'],
                                                   type: category.data()['type'],
+                                                  inv: category.data()['stock'],
                                                   docid: category.id,
                                                   rate1:
                                                       category.data()['rate1'],

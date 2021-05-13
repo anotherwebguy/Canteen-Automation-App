@@ -3,7 +3,6 @@ import 'package:canteen_app/Admin/editproduct.dart';
 import 'package:canteen_app/Helpers/extensions.dart';
 import 'package:canteen_app/Helpers/percent_indicator.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
-import 'package:canteen_app/Model/order.dart';
 import 'package:canteen_app/Users/addRating.dart';
 import 'package:canteen_app/Users/cart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

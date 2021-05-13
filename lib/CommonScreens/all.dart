@@ -172,6 +172,7 @@ class _AllCatState extends State<AllCat> {
                                                       all.data()['category'],
                                                   review: all.data()['rating'],
                                                   type: all.data()['type'],
+                                                  inv: all.data()['stock'],
                                                   docid: all.id,
                                                   rate1:
                                                       all.data()['rate1'],
