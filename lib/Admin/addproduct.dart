@@ -27,6 +27,7 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController price = new TextEditingController();
   String category;
   File img1;
+  String inv=null;
   String path1="";
   bool isLoading = false;
   String type=null;
@@ -238,6 +239,44 @@ class _AddProductState extends State<AddProduct> {
                   Text('Non-Veg only', style: primaryTextStyle()),
                 ],
               ),
+              text2("Quantity",textColor: Color(0xFF1e253a)).paddingTop(8.0),
+                  Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.start,
+                direction: Axis.horizontal,
+                children: [
+                  Theme(
+                    data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.black),
+                    child: Radio(
+                      value: 'instock',
+                      groupValue: inv,
+                      onChanged: (value) {
+                        setState(() {
+                          inv = value;
+                          toast("$inv Selected");
+                        });
+                      },
+                    ),
+                  ),
+                  Text('In Stock', style: primaryTextStyle()),
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      unselectedWidgetColor: Colors.black,
+                    ),
+                    child: Radio(
+                      value: 'outstock',
+                      groupValue: inv,
+                      onChanged: (value) {
+                        setState(() {
+                          inv = value;
+                          toast("$inv Selected");
+                        });
+                      },
+                    ),
+                  ),
+                  Text('Out Stock', style: primaryTextStyle()),
+                ],
+              ),
                   text2("Amount",textColor: Color(0xFF1e253a)).paddingTop(8.0),
                   formField(context,"Enter the amount", prefixIcon: Icons.attach_money,controller: price,keyboardType: TextInputType.number).paddingTop(8.0),
                   SizedBox(
@@ -260,7 +299,7 @@ class _AddProductState extends State<AddProduct> {
                             await uploadFileImage();
                             search(name.text);
                             Future.delayed(const Duration(seconds: 5), () {
-                              addFoodItemAllSection(name.text, description.text, price.text, path1,searchString,type, selectedIndexCategory);
+                              addFoodItemAllSection(name.text, description.text, price.text, path1,searchString,type, selectedIndexCategory,inv);
                               setState(() {
                                 isLoading = false;
                               });

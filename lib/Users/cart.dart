@@ -1,9 +1,8 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/CommonScreens/homeView.dart';
-import 'package:canteen_app/Helpers/constants.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:canteen_app/Services/dbdata.dart';
-import 'package:canteen_app/Users/token.dart';
 import 'package:canteen_app/Users/var.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,7 +35,6 @@ class _CartState extends State<Cart> {
   bool isLoading = false;
   List<FoodItems> products;
   var uuid = Uuid();
-
   void setTime() {
     if (timePeriod == "DayPeriod.am") {
       if (timeHour == 0) {
@@ -363,7 +361,8 @@ class _CartState extends State<Cart> {
                                       label: "OK",
                                       onPressed: () async {
                                         if (method == PaymentMethod.payonline) {
-                                          await openCheckout(amount * 100);
+                                          openCheckout(amount * 100);
+                                          
                                         } else {
                                           Fluttertoast.showToast(
                                               msg: "Payment done");
@@ -399,6 +398,7 @@ class _CartState extends State<Cart> {
                                                 products[i].image,
                                                 products[i].amount,
                                                 docid);
+                                                
                                           }
                                           Future.delayed(
                                               const Duration(seconds: 5),
@@ -408,6 +408,7 @@ class _CartState extends State<Cart> {
                                             setState(() {
                                               isLoading = false;
                                             });
+                                            
                                             showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
@@ -479,12 +480,11 @@ class _CartState extends State<Cart> {
                                   ],
                                 ),
                               ),
-                            ),
-                          )
+                            ),    
+                            )
                         ],
                       ),
-                    ),
-                  ],
+                      )   ],
                 ),
               ),
             );

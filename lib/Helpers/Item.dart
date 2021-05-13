@@ -5,7 +5,7 @@ import 'package:canteen_app/Helpers/widgets.dart';
 import 'package:flutter/material.dart';
 
 class Item extends StatelessWidget {
-  String name, image, price, description, category, type, docid;
+  String name, image, price, description, category, type, inv, docid;
   num rating, ratingcount, reviewcount, rate1, rate2, rate3, rate4, rate5;
   Item(
       {this.name,
@@ -15,6 +15,7 @@ class Item extends StatelessWidget {
       this.description,
       this.category,
       this.type,
+      this.inv,
       this.docid,
       this.rate1,
       this.rate2,
@@ -40,6 +41,7 @@ class Item extends StatelessWidget {
                       category: category,
                       review: rating,
                       type: type,
+                      inv: inv,
                       docid: docid,
                       rate1: rate1,
                       rate2: rate2,

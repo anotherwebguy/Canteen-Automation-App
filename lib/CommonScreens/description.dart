@@ -3,6 +3,7 @@ import 'package:canteen_app/Admin/editproduct.dart';
 import 'package:canteen_app/Helpers/extensions.dart';
 import 'package:canteen_app/Helpers/percent_indicator.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
+import 'package:canteen_app/Model/order.dart';
 import 'package:canteen_app/Users/addRating.dart';
 import 'package:canteen_app/Users/cart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,7 +15,7 @@ import 'package:canteen_app/Services/dbdata.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 
 class Description extends StatefulWidget {
-  final String image, name, description, amount, category, type, docid;
+  final String image, name, description, amount, category, type, inv,docid;
   final num review, ratingcount, reviewcount, rate1, rate2, rate3, rate4, rate5;
   Description(
       {this.image,
@@ -24,6 +25,7 @@ class Description extends StatefulWidget {
       this.category,
       this.review,
       this.type,
+      this.inv,
       this.docid,
       this.rate1,
       this.rate2,
@@ -235,6 +237,8 @@ class _DescriptionState extends State<Description> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               text(" " + widget.category),
+              widget.inv=='instock'?text("In Stock", textColor: Colors.green, fontFamily: 'Medium', fontSize: 16.0):
+              text("Out of Stock", textColor: Colors.red, fontFamily: 'Medium', fontSize: 16.0)
             ],
           ),
         ],
@@ -895,6 +899,7 @@ class _DescriptionState extends State<Description> {
                 role == "user"
                     ? GestureDetector(
                         onTap: () async {
+                          
                           await addFoodItemToCart(
                               widget.name,
                               cartcounter.toString(),
@@ -957,8 +962,7 @@ class _DescriptionState extends State<Description> {
                             ),
                           ),
                         ),
-                      )
-                    : GestureDetector(
+                ): GestureDetector(
                         onTap: () async {
                           Navigator.push(
                               context,
@@ -968,6 +972,7 @@ class _DescriptionState extends State<Description> {
                                         description: widget.description,
                                         price: widget.amount,
                                         type: widget.type,
+                                        inv: widget.inv,
                                         category: widget.category,
                                         image: widget.image,
                                         docid: widget.docid,

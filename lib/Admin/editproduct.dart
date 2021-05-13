@@ -13,12 +13,13 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart' as Path;
 
 class EditProduct extends StatefulWidget {
-  final String name, description, price, type, category, image, docid;
+  final String name, description, price, type, category, image,inv,docid;
   EditProduct(
       {this.name,
       this.description,
       this.price,
       this.type,
+      this.inv,
       this.category,
       this.image,
       this.docid});
@@ -38,6 +39,7 @@ class _EditProductState extends State<EditProduct> {
   String path1 = "";
   bool isLoading = false;
   String type = null;
+  String inv = null;
   List<String> listOfCategory = ["FastFood", "Drinks", "Desserts"];
   String selectedIndexCategory;
 
@@ -51,6 +53,7 @@ class _EditProductState extends State<EditProduct> {
     selectedIndexCategory = widget.category;
     type = widget.type;
     path1 = widget.image;
+    inv = widget.inv;
   }
 
   Future<void> chooseFile() async {
@@ -272,6 +275,45 @@ class _EditProductState extends State<EditProduct> {
                       Text('Non-Veg only', style: primaryTextStyle()),
                     ],
                   ),
+                  text2("Quantity", textColor: Color(0xFF1e253a)).paddingTop(8.0),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    alignment: WrapAlignment.start,
+                    direction: Axis.horizontal,
+                    children: [
+                      Theme(
+                        data: Theme.of(context)
+                            .copyWith(unselectedWidgetColor: Colors.black),
+                        child: Radio(
+                          value: 'instock',
+                          groupValue: inv,
+                          onChanged: (value) {
+                            setState(() {
+                              inv = value;
+                              toast("$inv Selected");
+                            });
+                          },
+                        ),
+                      ),
+                      Text('In Stock', style: primaryTextStyle()),
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                          unselectedWidgetColor: Colors.black,
+                        ),
+                        child: Radio(
+                          value: 'outstock',
+                          groupValue: inv,
+                          onChanged: (value) {
+                            setState(() {
+                              inv = value;
+                              toast("$inv Selected");
+                            });
+                          },
+                        ),
+                      ),
+                      Text('Out Stock', style: primaryTextStyle()),
+                    ],
+                  ),
                   text2("Amount", textColor: Color(0xFF1e253a)).paddingTop(8.0),
                   formField(context, "Enter the amount",
                           prefixIcon: Icons.attach_money,
@@ -305,7 +347,7 @@ class _EditProductState extends State<EditProduct> {
                           
                           search(name.text);
                           Future.delayed(const Duration(seconds: 5), () {
-                            updateFoodItemAllSection(name.text, description.text, price.text, path1,searchString,type, selectedIndexCategory,widget.docid);
+                            updateFoodItemAllSection(name.text, description.text, price.text, path1,inv,searchString,type, selectedIndexCategory,widget.docid);
                             setState(() {
                               isLoading = false;
                             });

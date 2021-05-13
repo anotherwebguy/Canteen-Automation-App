@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 String name, email, profileimg, role, phn;
 bool existence;
-
 Future<void> addGoogleUser(
     String uid, String name, String email, String profileimg) async {
   return await FirebaseFirestore.instance.collection("admins").doc(uid).set({
@@ -66,7 +65,7 @@ Future<void> addFoodItemAllSection(
     String path,
     List searchString,
     String type,
-    String category) async {
+    String category, String inv) async {
   return await FirebaseFirestore.instance.collection("All").add({
     'Itemname': name,
     'description': description,
@@ -82,7 +81,8 @@ Future<void> addFoodItemAllSection(
     'rate2': 0,
     'rate1': 0,
     'searchString': searchString,
-    'type': type
+    'type': type,
+    'stock':inv
   });
 }
 
@@ -91,6 +91,7 @@ Future<void> updateFoodItemAllSection(
     String description,
     String amount,
     String path,
+    String inv,
     List searchString,
     String type,
     String category,
@@ -102,7 +103,8 @@ Future<void> updateFoodItemAllSection(
     'image': path,
     'category': category,
     'searchString': searchString,
-    'type': type
+    'type': type,
+    'stock':inv
   });
 }
 
