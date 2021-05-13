@@ -22,7 +22,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   String barcode = "";
   bool isLoading = false;
   String docid;
-  int base_income = 5000;
+  int base_income = 500;
   int jan = 0,
       feb = 0,
       march = 0,
@@ -35,10 +35,10 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
       oct = 0,
       nov = 0,
       dec = 0,
-      count=0;
+      count = 0;
   DateTime nw = DateTime.now();
   var year, monthend, monthstart = 1;
-  List<Orders> orderslist;
+  List<Orders> orderslist = List<Orders>();
 
   @override
   void initState() {
@@ -76,232 +76,239 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
           if (inputyear.compareTo(year) == 0 &&
               inputmonth.compareTo(monthstart) >= 0 &&
               inputmonth.compareTo(monthend) <= 0) {
-                count++;
+            count++;
             print("yes");
             setState(() {
               if (inputmonth == 1) {
-                jan+=int.parse(queryelement.data()['amount']);
+                jan += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 2) {
-                feb+=int.parse(queryelement.data()['amount']);
+                feb += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 3) {
-                march+=int.parse(queryelement.data()['amount']);
+                march += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 4) {
-                april+=int.parse(queryelement.data()['amount']);
+                april += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 5) {
-                may+=int.parse(queryelement.data()['amount']);
+                may += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 6) {
-                jun+=int.parse(queryelement.data()['amount']);
+                jun += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 7) {
-                jul+=int.parse(queryelement.data()['amount']);
+                jul += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 8) {
-                aug+=int.parse(queryelement.data()['amount']);
+                aug += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 9) {
-                sep+=int.parse(queryelement.data()['amount']);
+                sep += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 10) {
-                oct+=int.parse(queryelement.data()['amount']);
+                oct += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 11) {
-                nov+=int.parse(queryelement.data()['amount']);
+                nov += int.parse(queryelement.data()['amount']);
               } else if (inputmonth == 12) {
-                dec+=int.parse(queryelement.data()['amount']);
-              } 
+                dec += int.parse(queryelement.data()['amount']);
+              }
             });
-          } 
+          }
         });
-      } 
+      }
     });
-    print(jan.toString()+feb.toString()+march.toString()+april.toString()+may.toString());
+  }
+
+  Future<void> setlist() async {
+    print(jan.toString() +
+        feb.toString() +
+        march.toString() +
+        april.toString() +
+        may.toString());
     var item1 = Orders();
-    item1.month="January";
+    item1.month = "January";
     item1.amount = jan.toString();
-    var per1 = (jan*100)/base_income;
-    if (jan==0){
+    var per1 = (jan * 100) / base_income;
+    if (jan == 0) {
       item1.profit = "0";
       item1.loss = "0";
-    }else if(per1>=100){
-      item1.profit = (per1-100).toString();
+    } else if (per1 >= 100) {
+      item1.profit = (per1 - 100).toString();
       item1.loss = "0";
     } else {
       item1.profit = "0";
-      item1.loss = (100-per1).toString();
+      item1.loss = (100 - per1).toString();
     }
-    if(1<=monthend){
+      print(item1.amount+item1.loss+item1.month+item1.profit);
       orderslist.add(item1);
-    }
-    
+
     var item2 = Orders();
-    item2.month="February";
+    item2.month = "February";
     item2.amount = feb.toString();
-    var per2 = (feb*100)/base_income;
-    if (feb==0){
+    var per2 = (feb * 100) / base_income;
+    if (feb == 0) {
       item2.profit = "0";
       item2.loss = "0";
-    }else if(per2>=100){
-      item2.profit = (per2-100).toString();
+    } else if (per2 >= 100) {
+      item2.profit = (per2 - 100).toString();
       item2.loss = "0";
     } else {
       item2.profit = "0";
-      item2.loss = (100-per2).toString();
+      item2.loss = (100 - per2).toString();
     }
-    if(2<=monthend){
-      orderslist.add(item2);
-    }
+    orderslist.add(item2);
 
     var item3 = Orders();
-    item3.month="March";
+    item3.month = "March";
     item3.amount = march.toString();
-    var per3 = (march*100)/base_income;
-    if (march==0){
+    var per3 = (march * 100) / base_income;
+    if (march == 0) {
       item3.profit = "0";
       item3.loss = "0";
-    }else if(per3>=100){
-      item3.profit = (per3-100).toString();
+    } else if (per3 >= 100) {
+      item3.profit = (per3 - 100).toString();
       item3.loss = "0";
     } else {
       item3.profit = "0";
-      item3.loss = (100-per3).toString();
+      item3.loss = (100 - per3).toString();
     }
-    if(3<=monthend){
       orderslist.add(item3);
-    }
 
     var item4 = Orders();
-    item4.month="April";
+    item4.month = "April";
     item4.amount = april.toString();
-    var per4 = (april*100)/base_income;
-    if (april==0){
+    var per4 = (april * 100) / base_income;
+    if (april == 0) {
       item4.profit = "0";
       item4.loss = "0";
-    }else if(per4>=100){
-      item4.profit = (per4-100).toString();
+    } else if (per4 >= 100) {
+      item4.profit = (per4 - 100).toString();
       item4.loss = "0";
     } else {
       item4.profit = "0";
-      item4.loss = (100-per4).toString();
+      item4.loss = (100 - per4).toString();
     }
-    if(4<=monthend){
       orderslist.add(item4);
-    }
     ////ider se kaam krna kal
     ///
     var item5 = Orders();
-    item5.month="May";
+    item5.month = "May";
     item5.amount = may.toString();
-    var per5 = (may*100)/base_income;
-    if(per5>=100){
-      item5.profit = (per5-100).toString();
+    var per5 = (may * 100) / base_income;
+    if (may == 0) {
+      item5.profit = "0";
+      item5.loss = "0";
+    } else if (per5 >= 100) {
+      item5.profit = (per5 - 100).toString();
       item5.loss = "0";
     } else {
       item5.profit = "0";
-      item5.loss = (100-per5).toString();
+      item5.loss = (100 - per5).toString();
     }
-    if(5<=monthend){
       orderslist.add(item5);
-    }
-
     var item6 = Orders();
-    item6.month="June";
+    item6.month = "June";
     item6.amount = jun.toString();
-    var per6 = (jun*100)/base_income;
-    if(per6>=100){
-      item6.profit = (per6-100).toString();
+    var per6 = (jun * 100) / base_income;
+    if (jun == 0) {
+      item6.profit = "0";
+      item6.loss = "0";
+    } else if (per6 >= 100) {
+      item6.profit = (per6 - 100).toString();
       item6.loss = "0";
     } else {
       item6.profit = "0";
-      item6.loss = (100-per6).toString();
+      item6.loss = (100 - per6).toString();
     }
-    if(6<=monthend){
       orderslist.add(item6);
-    }
 
     var item7 = Orders();
-    item7.month="Jully";
+    item7.month = "Jully";
     item7.amount = jul.toString();
-    var per7 = (jul*100)/base_income;
-    if(per7>=100){
-      item7.profit = (per7-100).toString();
+    var per7 = (jul * 100) / base_income;
+    if (jul == 0) {
+      item7.profit = "0";
+      item7.loss = "0";
+    } else if (per7 >= 100) {
+      item7.profit = (per7 - 100).toString();
       item7.loss = "0";
     } else {
       item7.profit = "0";
-      item7.loss = (100-per7).toString();
+      item7.loss = (100 - per7).toString();
     }
-    if(7<=monthend){
       orderslist.add(item7);
-    }
 
     var item8 = Orders();
-    item8.month="August";
+    item8.month = "August";
     item8.amount = aug.toString();
-    var per8 = (aug*100)/base_income;
-    if(per8>=100){
-      item8.profit = (per8-100).toString();
+    var per8 = (aug * 100) / base_income;
+    if (aug == 0) {
+      item8.profit = "0";
+      item8.loss = "0";
+    } else if (per8 >= 100) {
+      item8.profit = (per8 - 100).toString();
       item8.loss = "0";
     } else {
       item8.profit = "0";
-      item8.loss = (100-per8).toString();
+      item8.loss = (100 - per8).toString();
     }
-    if(8<=monthend){
       orderslist.add(item8);
-    }
 
     var item9 = Orders();
-    item9.month="September";
+    item9.month = "September";
     item9.amount = sep.toString();
-    var per9 = (sep*100)/base_income;
-    if(per9>=100){
-      item9.profit = (per9-100).toString();
+    var per9 = (sep * 100) / base_income;
+    if (sep == 0) {
+      item9.profit = "0";
+      item9.loss = "0";
+    } else if (per9 >= 100) {
+      item9.profit = (per9 - 100).toString();
       item9.loss = "0";
     } else {
       item9.profit = "0";
-      item9.loss = (100-per9).toString();
+      item9.loss = (100 - per9).toString();
     }
-    if(9<=monthend){
       orderslist.add(item9);
-    }
 
     var item10 = Orders();
-    item10.month="October";
+    item10.month = "October";
     item10.amount = oct.toString();
-    var per10 = (oct*100)/base_income;
-    if(per10>=100){
-      item10.profit = (per10-100).toString();
+    var per10 = (oct * 100) / base_income;
+    if (oct == 0) {
+      item10.profit = "0";
+      item10.loss = "0";
+    } else if (per10 >= 100) {
+      item10.profit = (per10 - 100).toString();
       item10.loss = "0";
     } else {
       item10.profit = "0";
-      item10.loss = (100-per10).toString();
+      item10.loss = (100 - per10).toString();
     }
-    if(10<=monthend){
       orderslist.add(item10);
-    }
 
     var item11 = Orders();
-    item11.month="November";
+    item11.month = "November";
     item11.amount = nov.toString();
-    var per11  = (nov*100)/base_income;
-    if(per11>=100){
-      item11.profit = (per11-100).toString();
+    var per11 = (nov * 100) / base_income;
+    if (nov == 0) {
+      item11.profit = "0";
+      item11.loss = "0";
+    } else if (per11 >= 100) {
+      item11.profit = (per11 - 100).toString();
       item11.loss = "0";
     } else {
       item11.profit = "0";
-      item11.loss = (100-per11).toString();
+      item11.loss = (100 - per11).toString();
     }
-    if(11<=monthend){
       orderslist.add(item11);
-    }
 
     var item12 = Orders();
-    item12.month="December";
+    item12.month = "December";
     item12.amount = dec.toString();
-    var per12 = (dec*100)/base_income;
-    if(per12>=100){
-      item12.profit = (per12-100).toString();
+    var per12 = (dec * 100) / base_income;
+    if (dec == 0) {
+      item12.profit = "0";
+      item12.loss = "0";
+    } else if (per12 >= 100) {
+      item12.profit = (per12 - 100).toString();
       item12.loss = "0";
     } else {
       item12.profit = "0";
-      item12.loss = (100-per12).toString();
+      item12.loss = (100 - per12).toString();
     }
-    if(12<=monthend){
       orderslist.add(item12);
-    }
     print(orderslist.length);
   }
 
@@ -624,12 +631,15 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                   color: Colors.black,
                   size: 25,
                 ),
-                onPressed: () async{
+                onPressed: () async {
                   loadingSnackBarAndMessage('Generating Sales-Report...');
-                  await getSales();
-                  hideSnackBar();
-                  print(orderslist.length.toString()+"yehi hai");
-                  await recieptView(context,orderslist);
+                  getSales();
+                  Future.delayed(const Duration(seconds: 5), () async {
+                    await setlist();
+                    hideSnackBar();
+                    print(orderslist.length.toString() + "yehi hai");
+                    await recieptView(context, orderslist);
+                  });
                 },
               ),
             ],
