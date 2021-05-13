@@ -14,7 +14,7 @@ import 'package:canteen_app/Services/dbdata.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 
 class Description extends StatefulWidget {
-  final String image, name, description, amount, category, type, docid;
+  final String image, name, description, amount, category, type, inv,docid;
   final num review, ratingcount, reviewcount, rate1, rate2, rate3, rate4, rate5;
   Description(
       {this.image,
@@ -24,6 +24,7 @@ class Description extends StatefulWidget {
       this.category,
       this.review,
       this.type,
+      this.inv,
       this.docid,
       this.rate1,
       this.rate2,
@@ -235,6 +236,8 @@ class _DescriptionState extends State<Description> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               text(" " + widget.category),
+              widget.inv=='instock'?text("In Stock", textColor: Colors.green, fontFamily: 'Medium', fontSize: 16.0):
+              text("Out of Stock", textColor: Colors.red, fontFamily: 'Medium', fontSize: 16.0)
             ],
           ),
         ],
@@ -957,8 +960,7 @@ class _DescriptionState extends State<Description> {
                             ),
                           ),
                         ),
-                      )
-                    : GestureDetector(
+                ): GestureDetector(
                         onTap: () async {
                           Navigator.push(
                               context,

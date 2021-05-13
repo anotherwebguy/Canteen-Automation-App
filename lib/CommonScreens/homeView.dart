@@ -480,6 +480,7 @@ class _HomeViewState extends State<HomeView> {
                                                             category:
                                                                 fastfood.data()[
                                                                     'category'],
+                                                            inv: fastfood.data()['stock'],
                                                             review:
                                                                 fastfood.data()[
                                                                     'rating'],
@@ -721,6 +722,7 @@ class _HomeViewState extends State<HomeView> {
                                               drinks.data()['description'],
                                           category: drinks.data()['category'],
                                           type: drinks.data()['type'],
+                                          inv: drinks.data()['stock'],
                                           docid: drinks.id,
                                           rate1: drinks.data()['rate1'],
                                           rate2: drinks.data()['rate2'],
@@ -834,6 +836,7 @@ class _HomeViewState extends State<HomeView> {
                                               drinks.data()['description'],
                                           category: drinks.data()['category'],
                                           type: drinks.data()['type'],
+                                          inv: drinks.data()['stock'],
                                           docid: drinks.id,
                                           rate1: drinks.data()['rate1'],
                                           rate2: drinks.data()['rate2'],

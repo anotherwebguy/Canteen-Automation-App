@@ -8,6 +8,8 @@ import 'package:canteen_app/Services/dbdata.dart';
 import 'package:canteen_app/Services/signin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class Dashboard extends StatefulWidget {
@@ -465,11 +467,10 @@ class _DashboardState extends State<Dashboard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GoogleAuthButton(
-                            borderRadius: 29,
-                            iconSize: 30,
-                            style: AuthButtonStyle.icon,
-                            onPressed: () async {
+                        SignInButton(
+                          Buttons.Google,
+                          text: "Sign Up with Google", 
+                          onPressed: () async {
                               setState(() {
                                 _loading = true;
                               });
@@ -497,43 +498,8 @@ class _DashboardState extends State<Dashboard> {
                                   ), (route) => false);
                                 }
                               }
-                            }),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        FacebookAuthButton(
-                            borderRadius: 50,
-                            iconSize: 30,
-                            style: AuthButtonStyle.icon,
-                            onPressed: () async {
-                              Navigator.pop(context);
-                              setState(() {
-                                _loading = true;
-                              });
-                              final result = await _auth.signInWithFacebook();
-                              if (result != null) {
-                                await fetchData();
-                                if (phn == null) {
-                                  setState(() {
-                                    _loading = false;
-                                  });
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Mobile()));
-                                } else {
-                                  setState(() {
-                                    _loading = false;
-                                  });
-                                  Navigator.pushAndRemoveUntil(context,
-                                      MaterialPageRoute(
-                                    builder: (context) {
-                                      return HomeView();
-                                    },
-                                  ), (route) => false);
-                                }
-                              }
-                            }),
+                            }
+                          ),
                       ],
                     ),
                     SizedBox(height: 20),
