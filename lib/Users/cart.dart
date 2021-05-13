@@ -571,7 +571,7 @@ class _CartState extends State<Cart> {
                       DocumentSnapshot cartList = snapshot.data.docs[index];
                       print(snapshot.data.docs[index].id);
                       amount += int.parse(cartList.data()['amount']);
-                      
+                      print(cartList.data()['Itemname']);
                       ordersize += 1;
                       if (products.asMap()[index] != null) {
                         products.removeAt(index);
