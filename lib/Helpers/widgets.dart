@@ -348,3 +348,13 @@ BoxDecoration boxDecoration5({double radius = spacing_middle, Color color = Colo
       border: Border.all(color: color),
       borderRadius: BorderRadius.all(Radius.circular(radius)));
 }
+
+InputDecoration formFieldDecoration(String hint_text) {
+  return InputDecoration(
+    labelText: hint_text,
+    focusColor: Color(0xFFf17015),
+    counterText: "",
+    labelStyle: TextStyle(fontFamily: "Regular", fontSize: textSizeMedium),
+    contentPadding: new EdgeInsets.only(bottom: 2.0),
+  );
+}
