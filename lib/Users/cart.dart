@@ -1,20 +1,13 @@
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canteen_app/CommonScreens/homeView.dart';
-import 'package:canteen_app/Helpers/constants.dart';
-import 'package:canteen_app/Helpers/pdfView.dart';
 import 'package:canteen_app/Helpers/widgets.dart';
-import 'package:canteen_app/Model/order.dart';
-import 'package:canteen_app/Model/recieptorder.dart';
 import 'package:canteen_app/Services/dbdata.dart';
-import 'package:canteen_app/Users/token.dart';
 import 'package:canteen_app/Users/var.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -491,8 +484,7 @@ class _CartState extends State<Cart> {
                             )
                         ],
                       ),
-                    ),
-                  ],
+                                      )                  ],
                 ),
               ),
             );
