@@ -11,8 +11,6 @@ import 'dart:io';
 import 'package:pdf/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:syncfusion_flutter_charts/charts.dart';
-
 recieptView(context, List<Orders> orderslist) async {
   final Document pdf = Document();
 
