@@ -14,6 +14,29 @@
 <h1 align=center> Tech Stack 🔥 </h1>  
   <p align="center">
   <img src="https://img.shields.io/badge/dart-%230175C2.svg?&style=for-the-badge&logo=dart&logoColor=white"/> <img src="https://img.shields.io/badge/Flutter%20-%2302569B.svg?&style=for-the-badge&logo=Flutter&logoColor=white" /> <img src="https://img.shields.io/badge/Firebase-orange" width=80/> <img src="https://dashboard.razorpay.com/img/logo_full.png" width=80 height=30/>  <img src="https://img.shields.io/badge/github%20-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/>
+	
+<h1> ScreenShots: <h1>
+
+<img src="https://user-images.githubusercontent.com/66346161/118356918-0c892080-b595-11eb-86c6-9dc6a8e274ba.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118356924-13b02e80-b595-11eb-99c0-fde31a99f530.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118356928-17dc4c00-b595-11eb-9ca1-3e58d25788e2.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118356676-0cd4ec00-b594-11eb-8963-b608128c954d.png" width=32%/>
+<img src="https://user-images.githubusercontent.com/66346161/118356688-1d856200-b594-11eb-96fb-1ee96daac54f.png" width=31%/>
+<img src="https://user-images.githubusercontent.com/66346161/118356701-270eca00-b594-11eb-9f10-0d190f2bf756.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118356707-2d9d4180-b594-11eb-93dd-14d229b17a9e.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118356708-33932280-b594-11eb-9e1a-f3212f9cd4e6.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118356710-3a219a00-b594-11eb-99d0-546983b26f25.png" width=33%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357171-63432a00-b596-11eb-998f-44c071751164.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357185-73f3a000-b596-11eb-9553-b6dbc9abca5c.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357201-82da5280-b596-11eb-8f9c-6d45c02e7a95.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357210-88d03380-b596-11eb-924d-5f65a602d179.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357226-9d143080-b596-11eb-9d4c-d5bec7d2ca81.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357228-a30a1180-b596-11eb-9e11-3fd6d670a70d.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357245-c339d080-b596-11eb-9aaf-8f5ba066ee19.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357253-c9c84800-b596-11eb-9d81-3dad302863ca.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357272-dcdb1800-b596-11eb-8d7f-980bbbbe47ed.png" width=30%/>
+<img src="https://user-images.githubusercontent.com/66346161/118357275-e2d0f900-b596-11eb-9098-9efaf511e92a.png" width=30%/>
+	
 
 <h2 align= "left"><b>Contributing Guidelines!</b></h2>
 
