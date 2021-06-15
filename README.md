@@ -108,7 +108,7 @@ click on `Compare and Pull Request`
 		
 <img src="https://user-images.githubusercontent.com/41269164/70219836-8d6ea680-176b-11ea-81d5-549093bf0954.png" width=600>
 
-**Congratulations!**  :boom: Sit and relax, you've made your contribution to [Insta Food](https://github.com/anotherwebguy/Canteen-Automation-App) project.
+**Congratulations!!**  :boom: Sit and relax, you've made your contribution to [Insta Food](https://github.com/anotherwebguy/Canteen-Automation-App) project.
 
 <h2 align= "left"><b>Code of Conduct</b></h2>
 
